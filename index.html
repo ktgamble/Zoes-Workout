@@ -13,7 +13,7 @@
   --accent:#6E3A63; --accent-ink:#FFFFFF; --soft:#E2EAE5;
   --heavy:#6E3A63; --medium:#2C6B66; --endurance:#8A5E14;
   --heavy-bg:#F1E6EE; --medium-bg:#E1EFEC; --endurance-bg:#F5ECDC;
-  --warn:#9B2C2C;
+  --up:#1F6B45; --up-bg:#DDF0E5; --down:#9B2C2C; --down-bg:#F7E1E1; --hold-bg:#E6EBEA;
   --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
   box-sizing:border-box;
@@ -27,7 +27,7 @@
     --accent:#D9A1CB; --accent-ink:#22121E; --soft:#1F2D2F;
     --heavy:#D9A1CB; --medium:#7CC4BC; --endurance:#E0B465;
     --heavy-bg:#2C1E29; --medium-bg:#18302E; --endurance-bg:#2E2617;
-    --warn:#F0A0A0;
+    --up:#86D7A8; --up-bg:#163024; --down:#F0A0A0; --down-bg:#3A1C1C; --hold-bg:#223033;
     color-scheme:dark;
   }
 }
@@ -36,7 +36,7 @@
   --accent:#D9A1CB; --accent-ink:#22121E; --soft:#1F2D2F;
   --heavy:#D9A1CB; --medium:#7CC4BC; --endurance:#E0B465;
   --heavy-bg:#2C1E29; --medium-bg:#18302E; --endurance-bg:#2E2617;
-  --warn:#F0A0A0;
+  --up:#86D7A8; --up-bg:#163024; --down:#F0A0A0; --down-bg:#3A1C1C; --hold-bg:#223033;
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:inherit}
@@ -45,10 +45,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
-
 .wrap{max-width:860px;margin:0 auto;padding:0 18px 56px}
 
-/* Top bar */
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
 .bar-inner{max-width:860px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em}
@@ -56,7 +54,6 @@ button,input,select{font:inherit;color:inherit}
 .tab{border:0;background:transparent;padding:8px 16px;border-radius:999px;cursor:pointer;font-weight:700;font-size:15px;color:var(--muted)}
 .tab[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 0 var(--line)}
 
-/* Hero */
 .hero{display:grid;grid-template-columns:auto 1fr;gap:4px 22px;align-items:end;padding:28px 0 22px;border-bottom:1px solid var(--line)}
 .letter{font-family:var(--display);font-weight:800;font-size:clamp(120px,26vw,200px);line-height:.78;letter-spacing:-.06em;color:var(--accent);grid-row:span 2}
 .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(26px,5vw,36px);line-height:1.1;margin:0;letter-spacing:-.02em}
@@ -66,16 +63,8 @@ button,input,select{font:inherit;color:inherit}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.small{padding:6px 12px;min-height:36px;font-size:14px;border-radius:10px}
 .btn.ghost{background:transparent}
-.btn.danger{color:var(--warn)}
+.btn.danger{color:var(--down)}
 
-.picker{display:none;grid-column:1/-1;margin-top:14px;gap:10px;grid-template-columns:repeat(3,1fr)}
-.picker.open{display:grid}
-.pick{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px;text-align:left;cursor:pointer}
-.pick b{font-family:var(--display);font-size:28px;line-height:1;display:block}
-.pick span{font-size:13px;color:var(--muted);display:block;margin-top:6px}
-.pick[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-
-/* Timeline */
 .block{display:grid;grid-template-columns:72px 1fr;gap:0 18px;padding:22px 0;border-bottom:1px solid var(--line)}
 .time{font-family:var(--display);font-weight:700;font-size:15px;color:var(--muted);padding-top:4px}
 .time small{display:block;font-family:var(--body);font-weight:400;font-size:13px}
@@ -88,31 +77,40 @@ button,input,select{font:inherit;color:inherit}
 .round{margin-top:14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
 .round-head{display:flex;justify-content:space-between;align-items:baseline;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:700}
 .round-head span{font-weight:400;font-size:14px;color:var(--muted)}
-.lift{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start;padding:12px 14px;border-bottom:1px solid var(--line)}
+.lift{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:start;padding:14px;border-bottom:1px solid var(--line)}
 .lift:last-child{border-bottom:0}
-.tier{font-size:13px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:2px}
+.tier{font-size:13px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:2px;display:inline-block}
 .tier.H{color:var(--heavy);background:var(--heavy-bg)}
 .tier.M{color:var(--medium);background:var(--medium-bg)}
 .tier.E{color:var(--endurance);background:var(--endurance-bg)}
+.tier.P{color:var(--muted);background:var(--hold-bg)}
 .lift-name{font-weight:700}
-.lift-reps{font-size:15px}
-.lift-cue{font-size:14px;color:var(--muted);margin-top:2px}
+.lift-cue{font-size:14px;color:var(--muted);margin-top:4px}
 .lift-swap{font-size:14px;margin-top:4px;padding-left:10px;border-left:3px solid var(--line);color:var(--muted)}
+.last{font-size:14px;color:var(--muted);margin-top:4px}
+
+.rx{margin-top:8px;border-radius:12px;padding:9px 12px;background:var(--hold-bg)}
+.rx.up{background:var(--up-bg)}
+.rx.down{background:var(--down-bg)}
+.rx.new{background:var(--soft)}
+.rx-main{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.25;letter-spacing:-.01em}
+.rx-sub{font-size:14px;color:var(--muted);margin-top:2px}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;margin-bottom:4px;background:var(--surface);color:var(--muted)}
+.badge.up{color:var(--up)}
+.badge.down{color:var(--down)}
+.badge.new{color:var(--accent)}
 
 .core{width:100%;border-collapse:collapse;margin-top:10px;font-size:16px}
 .core th,.core td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 .core th{font-size:14px;color:var(--muted);font-weight:700}
+.core td:last-child{white-space:nowrap}
+.station-n{font-family:var(--display);font-weight:700;color:var(--muted);margin-right:8px}
 
-details.safety{margin-top:22px;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:4px 16px}
-details.safety summary{cursor:pointer;font-weight:700;padding:12px 0}
-details.safety ul{margin:0 0 14px;padding-left:20px}
-
-/* Progression */
 .prog-head{padding:28px 0 8px}
 .prog-head h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,38px);margin:0;letter-spacing:-.02em}
 .prog-head p{margin:6px 0 0;color:var(--muted)}
 .controls{display:flex;flex-wrap:wrap;gap:16px 24px;padding:14px 0 18px;border-bottom:1px solid var(--line)}
-.control label{display:block;font-size:14px;color:var(--muted);margin-bottom:6px;font-weight:700}
+.control .lbl{display:block;font-size:14px;color:var(--muted);margin-bottom:6px;font-weight:700}
 .seg{display:inline-flex;background:var(--soft);padding:4px;border-radius:12px;gap:4px;flex-wrap:wrap}
 .seg button{border:0;background:transparent;padding:7px 12px;border-radius:9px;cursor:pointer;font-weight:700;font-size:14px;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 0 var(--line)}
@@ -120,9 +118,7 @@ details.safety ul{margin:0 0 14px;padding-left:20px}
 table.prog{width:100%;border-collapse:collapse;margin-top:8px}
 table.prog th{text-align:left;font-size:14px;color:var(--muted);font-weight:700;padding:10px 8px;border-bottom:1px solid var(--line)}
 table.prog td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-.next{font-weight:700}
-.next.up{color:var(--medium)}
-.next.down{color:var(--warn)}
+table.prog .rx{margin-top:0}
 .acts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
 .hist td{background:var(--soft);padding:10px 12px}
 .hist ul{list-style:none;margin:0;padding:0}
@@ -137,49 +133,29 @@ table.prog td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-alig
   .block{grid-template-columns:1fr}
   .time{padding:0 0 4px}
   .time small{display:inline;margin-left:6px}
-  .picker{grid-template-columns:1fr}
-  .lift{grid-template-columns:auto 1fr}
-  .lift .btn{grid-column:2;justify-self:start;margin-top:6px}
+  .lift{grid-template-columns:1fr}
+  .lift .tier{justify-self:start}
+  .lift .btn{justify-self:start;margin-top:4px}
   table.prog thead{display:none}
   table.prog,table.prog tbody,table.prog tr,table.prog td{display:block;width:100%}
   table.prog tr.row{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:12px 0 0;padding:6px 4px}
-  table.prog tr.row td{border:0;padding:5px 10px}
-  table.prog td[data-l]::before{content:attr(data-l);display:block;font-size:13px;color:var(--muted);font-weight:700}
+  table.prog tr.row td{border:0;padding:6px 10px}
+  table.prog td[data-l]::before{content:attr(data-l);display:block;font-size:13px;color:var(--muted);font-weight:700;margin-bottom:2px}
   .acts{justify-content:flex-start}
-  tr.hist td{border-radius:0 0 14px 14px;margin-top:-4px}
 }
 
-/* Dialog */
-dialog{border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:0;width:min(440px,calc(100vw - 28px))}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);padding:0;width:min(440px,calc(100vw - 28px));max-height:88vh}
 dialog::backdrop{background:rgba(10,16,18,.45)}
 .dlg{padding:20px}
 .dlg h3{font-family:var(--display);font-size:22px;margin:0 0 2px}
-.dlg .sub{color:var(--muted);margin:0 0 16px;font-size:15px}
+.dlg .sub{color:var(--muted);margin:0 0 14px;font-size:15px}
 .field{margin-bottom:12px}
 .field label{display:block;font-weight:700;font-size:14px;margin-bottom:5px}
 .field input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:17px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sets{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.set-tools{display:flex;gap:8px;margin:-2px 0 12px}
 .dlg-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
-.err{color:var(--warn);font-size:14px;min-height:20px;margin:0}
-
-.core td .lift-cue{margin-top:2px}
-.core td:last-child{white-space:nowrap}
-.station-n{font-family:var(--display);font-weight:700;color:var(--muted);margin-right:8px}
-dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
-.lib-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:sticky;top:0;background:var(--surface);padding:20px 20px 10px;border-bottom:1px solid var(--line);z-index:1}
-.lib-top h3{font-family:var(--display);font-size:22px;margin:0}
-.lib-top p{margin:2px 0 0;color:var(--muted);font-size:15px}
-.lib-body{padding:6px 20px 20px}
-.lib-cat{font-family:var(--display);font-weight:700;font-size:17px;margin:18px 0 8px}
-.lib-row{display:flex;gap:8px;align-items:stretch;margin-bottom:8px}
-.lib-item{flex:1;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:10px 12px;cursor:pointer}
-.lib-item[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.lib-item .nm{font-weight:700}
-.lib-item .wk{font-size:14px;color:var(--muted)}
-.lib-item .in{font-size:13px;font-weight:700;color:var(--accent);margin-left:6px}
-.addown{margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
-.addown summary{cursor:pointer;font-weight:700;padding:6px 0}
-.field select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:17px}
+.err{color:var(--down);font-size:14px;min-height:20px;margin:0}
 .status{font-size:13px;color:var(--muted);margin-top:28px}
 [hidden]{display:none !important}
 @media (prefers-reduced-motion: no-preference){
@@ -200,17 +176,16 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
 </header>
 
 <main class="wrap">
-  <!-- WORKOUT TAB -->
   <section id="panel-workout" role="tabpanel" aria-labelledby="tab-workout">
     <div class="hero">
       <div class="letter" id="bigLetter" aria-hidden="true">A</div>
       <h1 id="heroTitle">Workout A</h1>
-      <p id="heroSub">45 minutes. Next time: Workout B.</p>
+      <p id="heroSub">45 minutes.</p>
       <div class="hero-actions">
         <button class="btn" id="changeBtn">Change workout</button>
         <button class="btn primary" id="finishBtn">Finish and move to B</button>
+        <button class="btn" id="applyAll" hidden>Update all targets</button>
       </div>
-      <div class="picker" id="picker" role="group" aria-label="Choose a workout"></div>
     </div>
 
     <div class="block">
@@ -232,9 +207,9 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
       <div class="time">5:00<small>3 min</small></div>
       <div>
         <h2>Push-up primer</h2>
-        <p><b id="primerTarget">5 rounds of 2</b> strict push-ups, about 30 seconds rest between rounds.</p>
-        <p class="muted">Quality over quantity. If 2 strict reps aren't there today, raise the hands slightly.</p>
-        <button class="btn small" data-log="primer|P">Log primer</button>
+        <p>Strict push-ups, about 30 seconds rest between rounds. If 2 strict reps aren’t there today, raise the hands slightly.</p>
+        <div id="primerRx"></div>
+        <button class="btn small" data-log="primer|P" style="margin-top:10px">Log primer</button>
       </div>
     </div>
 
@@ -242,8 +217,8 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
       <div class="time">8:00<small>19 min</small></div>
       <div>
         <h2>Lifting rounds</h2>
-        <p>Each round is a tri-set: heavy, medium, endurance back to back with 20–30 seconds between, then 45–60 seconds rest. Do 2 sets.</p>
-        <p class="muted">Heavy means 2–3 reps left in the tank. No grinding, no breath-holding. If she needs more rest, drop a set rather than rush.</p>
+        <p>Each round is a tri-set: strength, hypertrophy, endurance back to back with 20–30 seconds between, then 45–60 seconds rest. Do 2 sets.</p>
+        <p class="muted">Targets update when she accepts a change on the Progression tab. Strength work means 2–3 reps left in the tank, with no grinding or breath-holding.</p>
         <div id="rounds"></div>
       </div>
     </div>
@@ -258,7 +233,7 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
           <li>Lat stretch holding the pull-up bar</li>
           <li>Cross-body shoulder stretch, each side</li>
           <li>Overhead triceps stretch, each side</li>
-          <li>Wide-knee child's pose</li>
+          <li>Wide-knee child’s pose</li>
         </ul>
       </div>
     </div>
@@ -281,31 +256,29 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
         <p class="muted" style="margin-top:10px">Shuffle for a new balanced circuit. Exhale on every effort. If the belly cones along the midline, switch to the easier version.</p>
       </div>
     </div>
-
   </section>
 
-  <!-- PROGRESSION TAB -->
   <section id="panel-prog" role="tabpanel" aria-labelledby="tab-prog" hidden>
     <div class="prog-head">
       <h1>Progression</h1>
-      <p>Log each lift after the session. When both sets hit the top of the range, the next-time column tells her to go up.</p>
+      <p>Log each lift after the session. When she hits a target 2 sessions in a row, a change is suggested: strength lifts add weight, hypertrophy and endurance lifts add reps first. Accept it and the new target shows on the Workout tab.</p>
     </div>
     <div class="controls">
-      <div class="control">
-        <label id="lbl-view">Show</label>
-        <div class="seg" role="group" aria-labelledby="lbl-view" id="viewSeg"></div>
-      </div>
-      <div class="control">
-        <label id="lbl-stage">Heavy rep range</label>
+      <div class="control"><span class="lbl" id="lbl-view">Show</span>
+        <div class="seg" role="group" aria-labelledby="lbl-view" id="viewSeg"></div></div>
+      <div class="control"><span class="lbl" id="lbl-stage">Strength rep range</span>
         <div class="seg" role="group" aria-labelledby="lbl-stage" id="stageSeg">
           <button data-stage="early">5–6 reps</button>
           <button data-stage="late">6–8 reps, 2nd and 3rd trimester</button>
-        </div>
-      </div>
+        </div></div>
+      <div class="control"><span class="lbl" id="lbl-db">Dumbbell jumps</span>
+        <div class="seg" role="group" aria-labelledby="lbl-db" id="dbSeg"></div></div>
+      <div class="control"><span class="lbl" id="lbl-cable">Cable jumps</span>
+        <div class="seg" role="group" aria-labelledby="lbl-cable" id="cableSeg"></div></div>
     </div>
     <div style="overflow-x:auto">
       <table class="prog">
-        <thead><tr><th scope="col">Lift</th><th scope="col">Target</th><th scope="col">Last session</th><th scope="col">Next time</th><th scope="col"><span class="sr" hidden>Actions</span></th></tr></thead>
+        <thead><tr><th scope="col">Lift</th><th scope="col">Last session</th><th scope="col">Target</th><th scope="col"><span hidden>Actions</span></th></tr></thead>
         <tbody id="progBody"></tbody>
       </table>
     </div>
@@ -317,45 +290,19 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
   <form class="dlg" id="logForm" method="dialog">
     <h3 id="dlgTitle">Log lift</h3>
     <p class="sub" id="dlgSub"></p>
-    <div class="field">
-      <label for="fDate">Date</label>
-      <input type="date" id="fDate" required>
-    </div>
-    <div class="field">
-      <label for="fLoad" id="fLoadLbl">Weight (lb)</label>
-      <input id="fLoad" autocomplete="off">
-    </div>
-    <div class="row2">
-      <div class="field"><label for="fS1" id="fS1Lbl">Set 1 reps</label><input id="fS1" type="number" inputmode="numeric" min="0" max="99"></div>
-      <div class="field"><label for="fS2" id="fS2Lbl">Set 2 reps</label><input id="fS2" type="number" inputmode="numeric" min="0" max="99"></div>
+    <div class="field"><label for="fDate">Date</label><input type="date" id="fDate" required></div>
+    <div class="field" id="loadWrap"><label for="fLoad" id="fLoadLbl">Weight (lb)</label><input id="fLoad" autocomplete="off"></div>
+    <div class="sets" id="setsWrap"></div>
+    <div class="set-tools" id="setTools">
+      <button type="button" class="btn small ghost" id="addSet">Add set</button>
+      <button type="button" class="btn small ghost" id="rmSet">Remove set</button>
     </div>
     <p class="err" id="fErr" role="alert"></p>
     <div class="dlg-actions">
       <button type="button" class="btn ghost" id="dlgCancel">Cancel</button>
-      <button type="submit" class="btn primary" id="dlgSave">Save entry</button>
+      <button type="submit" class="btn primary">Save entry</button>
     </div>
   </form>
-</dialog>
-
-<dialog id="libDlg" class="lib" aria-labelledby="libTitle">
-  <div class="lib-top">
-    <div><h3 id="libTitle">Swap station</h3><p id="libSub"></p></div>
-    <button type="button" class="btn small ghost" id="libClose">Close</button>
-  </div>
-  <div class="lib-body">
-    <div id="libList"></div>
-    <details class="addown">
-      <summary>Add your own exercise</summary>
-      <form id="customForm" style="margin-top:10px">
-        <div class="field"><label for="cName">Name</label><input id="cName" maxlength="60" autocomplete="off"></div>
-        <div class="field"><label for="cWork">Work</label>
-          <select id="cWork"><option>40 sec</option><option>20 sec per side</option></select></div>
-        <div class="field"><label for="cCue">Cue (optional)</label><input id="cCue" maxlength="140" autocomplete="off"></div>
-        <p class="err" id="cErr" role="alert"></p>
-        <button type="submit" class="btn primary small">Add and use in this station</button>
-      </form>
-    </details>
-  </div>
 </dialog>
 
 <script>
@@ -364,41 +311,39 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
 
   // ---------- Plan data ----------
   var LIFTS = {
-    neg:   {name:"Pull-up negatives", kind:"neg", uni:false,
-            cue:"Step up from a box, lower for 3–5 seconds, step down. Don’t drop.",
+    neg:   {name:"Pull-up negatives", kind:"neg", equip:"bar", uni:false,
+            cue:"Step up from a box, lower for the set time, step down. Don’t drop.",
             swap:"From the 2nd trimester: switch to a cable lat pulldown."},
-    row:   {name:"Single-arm DB row", kind:"wt", uni:true,
+    row:   {name:"Single-arm DB row", kind:"wt", equip:"db", uni:true,
             cue:"Hand braced on the bench, pull the elbow toward the hip.",
             swap:"If bending gets awkward, brace on a bench set to a low incline."},
-    gor:   {name:"Gorilla row", kind:"wt", uni:true,
+    gor:   {name:"Gorilla row", kind:"wt", equip:"db", uni:true,
             cue:"Hinged with a dumbbell in each hand, alternate arms.",
             swap:"As the belly grows: seated cable row or split-stance single-arm cable row."},
-    chest: {name:"Single-arm cable chest press", kind:"wt", uni:true,
-            cue:"Standing, split stance. Don’t let the torso twist toward the cable.",
-            swap:""},
-    sp:    {name:"Single-arm DB shoulder press", kind:"wt", uni:true,
+    chest: {name:"Single-arm cable chest press", kind:"wt", equip:"cable", uni:true,
+            cue:"Standing, split stance. Don’t let the torso twist toward the cable.", swap:""},
+    sp:    {name:"Single-arm DB shoulder press", kind:"wt", equip:"db", uni:true,
             cue:"Half-kneeling, ribs down, no lower-back arch.",
             swap:"Later in pregnancy: seated with back support."},
-    vrow:  {name:"Single-arm cable vertical row", kind:"wt", uni:true,
-            cue:"Pull up along the body; elbow no higher than the shoulder.",
-            swap:""},
-    pu:    {name:"Incline push-ups", kind:"pu", uni:false,
-            cue:"Hands on a bench or the machine frame. Set the height to hit the reps.",
+    vrow:  {name:"Single-arm cable vertical row", kind:"wt", equip:"cable", uni:true,
+            cue:"Pull up along the body; elbow no higher than the shoulder.", swap:""},
+    pu:    {name:"Incline push-ups", kind:"pu", equip:"body", uni:false,
+            cue:"Hands on a bench or the machine frame.",
             swap:"Raise the incline as the belly grows. Stop if the belly cones."},
-    fp:    {name:"Cable face pull", kind:"wt", uni:false,
-            cue:"Rope toward the forehead, elbows high, squeeze the shoulder blades.",
-            swap:""},
-    tp:    {name:"Single-arm cable tricep pushdown", kind:"wt", uni:true,
-            cue:"Elbow pinned at the side; only the forearm moves.",
-            swap:""},
-    primer:{name:"Push-up primer", kind:"primer", uni:false, cue:"", swap:""}
+    fp:    {name:"Cable face pull", kind:"wt", equip:"cable", uni:false,
+            cue:"Rope toward the forehead, elbows high, squeeze the shoulder blades.", swap:""},
+    tp:    {name:"Single-arm cable tricep pushdown", kind:"wt", equip:"cable", uni:true,
+            cue:"Elbow pinned at the side; only the forearm moves.", swap:""},
+    primer:{name:"Push-up primer", kind:"primer", equip:"body", uni:false, cue:"", swap:""}
   };
-  var TIER_NAME = {H:"Heavy", M:"Medium", E:"Endurance", P:"Primer"};
+  var TIER_NAME = {H:"Strength", M:"Hypertrophy", E:"Endurance", P:"Primer"};
   var WORKOUTS = {
     A:[["neg","chest","vrow"],["sp","gor","fp"],["row","pu","tp"]],
     B:[["chest","row","fp"],["neg","sp","tp"],["gor","vrow","pu"]],
     C:[["row","sp","pu"],["chest","gor","fp"],["neg","vrow","tp"]]
   };
+  var ORDER = ["A","B","C"], TIERS = ["H","M","E"];
+
   var CORE_CATS = ["Anti-rotation","Anti-extension","Side and lateral","Hips and pelvic floor","Balance"];
   var CORE_LIB = [
     {id:"birddog", cat:"Anti-rotation", name:"Bird dog", work:"40 sec", cue:"Reach opposite arm and leg long, pause, switch slowly.", note:""},
@@ -419,58 +364,71 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
     {id:"slrow", cat:"Balance", name:"Single-leg cable row", work:"20 sec per side", cue:"Light cable, stand on one leg, row without wobbling.", note:"Keep support within reach."}
   ];
   var CORE_DEFAULT = ["birddog","sideplank","pallof","suitcase","bridge"];
-  function coreItem(id){
-    for (var i=0;i<CORE_LIB.length;i++) if (CORE_LIB[i].id === id) return CORE_LIB[i];
-    var c = (state.custom||[]); for (var j=0;j<c.length;j++) if (c[j].id === id) return c[j];
-    return null;
-  }
-  var ORDER = ["A","B","C"];
-  var TIERS = ["H","M","E"];
 
   function nextOf(w){ return ORDER[(ORDER.indexOf(w)+1)%ORDER.length]; }
-
-  function range(id, tier){
-    var l = LIFTS[id];
-    if (l.kind === "neg") return [3,5];
-    if (tier === "H") return state.stage === "late" ? [6,8] : [5,6];
-    if (tier === "M") return [8,10];
-    return l.uni ? [10,12] : [15,20];
-  }
-  function targetText(id, tier){
-    if (id === "primer") return "5 rounds of " + primerReps();
-    var r = range(id, tier), l = LIFTS[id];
-    var s = r[0] + "–" + r[1] + " reps" + (l.uni ? " per arm" : "");
-    if (l.kind === "neg") s += ", 3–5 sec lowering";
-    return "2 sets of " + s;
+  function num(v){ if (v === "" || v == null) return null; var n = Number(v); return isFinite(n) ? n : null; }
+  function rid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+  function today(){
+    var d = new Date(), m = d.getMonth()+1, day = d.getDate();
+    return d.getFullYear() + "-" + (m<10?"0":"") + m + "-" + (day<10?"0":"") + day;
   }
 
   // ---------- State + storage ----------
   var LS_KEY = "ubs-plan-v1";
-  var state = {current:"A", stage:"early", entries:[], core:CORE_DEFAULT.slice(), custom:[]};
-  try {
-    var raw = localStorage.getItem(LS_KEY);
-    if (raw) { var p = JSON.parse(raw); if (p && typeof p === "object") state = normalize(p); }
-  } catch(e){}
+  function defaults(){ return {current:"A", stage:"early", entries:[], core:CORE_DEFAULT.slice(), custom:[], steps:{db:5, cable:5}, targets:{}, dismissed:{}}; }
+  var state = defaults();
 
-  function normalize(p){
-    var custom = Array.isArray(p.custom) ? p.custom.filter(function(c){
-      return c && typeof c.id === "string" && typeof c.name === "string";
-    }).map(function(c){
-      return {id:c.id, cat:"Your own", name:c.name.slice(0,60), work:c.work === "20 sec per side" ? "20 sec per side" : "40 sec", cue:String(c.cue||"").slice(0,140), note:"", custom:true};
-    }) : [];
-    var ids = {}; CORE_LIB.forEach(function(x){ ids[x.id]=1; }); custom.forEach(function(x){ ids[x.id]=1; });
-    var core = CORE_DEFAULT.map(function(d, i){
-      var v = Array.isArray(p.core) ? p.core[i] : null;
-      return ids[v] ? v : d;
+  function coreItem(id){
+    for (var i=0;i<CORE_LIB.length;i++) if (CORE_LIB[i].id === id) return CORE_LIB[i];
+    var c = state.custom || []; for (var j=0;j<c.length;j++) if (c[j].id === id) return c[j];
+    return null;
+  }
+  function normalizeEntry(e){
+    if (!e || !LIFTS[e.lift]) return null;
+    var o = {id:String(e.id || rid()), date:String(e.date || today()).slice(0,10), lift:e.lift,
+             tier: e.lift === "primer" ? "P" : (TIERS.indexOf(e.tier) >= 0 ? e.tier : "M"),
+             load: e.load == null ? "" : String(e.load).slice(0,40)};
+    if (e.lift === "primer"){
+      o.reps = num(e.reps != null ? e.reps : e.s1); o.rounds = num(e.rounds != null ? e.rounds : e.s2); o.load = "";
+      if (o.reps == null) return null;
+      if (o.rounds == null) o.rounds = 5;
+    } else {
+      var raw = Array.isArray(e.sets) ? e.sets : [e.s1, e.s2];
+      o.sets = raw.map(num).filter(function(n){ return n != null; }).slice(0,6);
+      if (!o.sets.length) return null;
+    }
+    return o;
+  }
+  function cleanMap(m){
+    var o = {}; if (!m || typeof m !== "object") return o;
+    Object.keys(m).forEach(function(k){ var id = k.split("|")[0]; if (LIFTS[id] && typeof m[k] === "string") o[k] = m[k]; });
+    return o;
+  }
+  function cleanTargets(m){
+    var o = {}; if (!m || typeof m !== "object") return o;
+    Object.keys(m).forEach(function(k){
+      var id = k.split("|")[0], t = m[k];
+      if (!LIFTS[id] || !t || num(t.reps) == null) return;
+      o[k] = {load: t.load == null ? "" : String(t.load).slice(0,60), reps: num(t.reps), from: typeof t.from === "string" ? t.from : ""};
     });
+    return o;
+  }
+  function normalize(p){
+    var custom = Array.isArray(p.custom) ? p.custom.filter(function(c){ return c && typeof c.id === "string" && typeof c.name === "string"; })
+      .map(function(c){ return {id:c.id, cat:"Your own", name:c.name.slice(0,60), work:c.work === "20 sec per side" ? "20 sec per side" : "40 sec", cue:String(c.cue||"").slice(0,140), note:"", custom:true}; }) : [];
+    var ids = {}; CORE_LIB.forEach(function(x){ ids[x.id]=1; }); custom.forEach(function(x){ ids[x.id]=1; });
+    var core = CORE_DEFAULT.map(function(d, i){ var v = Array.isArray(p.core) ? p.core[i] : null; return ids[v] ? v : d; });
+    var st = p.steps || {};
     return {
       current: ORDER.indexOf(p.current) >= 0 ? p.current : "A",
       stage: p.stage === "late" ? "late" : "early",
-      entries: Array.isArray(p.entries) ? p.entries.filter(function(e){ return e && LIFTS[e.lift]; }) : [],
-      core: core,
-      custom: custom
+      entries: Array.isArray(p.entries) ? p.entries.map(normalizeEntry).filter(Boolean) : [],
+      core: core, custom: custom,
+      steps: {db: [2.5,5].indexOf(st.db) >= 0 ? st.db : 5, cable: [2.5,5,10].indexOf(st.cable) >= 0 ? st.cable : 5},
+      targets: cleanTargets(p.targets), dismissed: cleanMap(p.dismissed)
     };
   }
+  try { var raw = localStorage.getItem(LS_KEY); if (raw){ var p = JSON.parse(raw); if (p && typeof p === "object") state = normalize(p); } } catch(e){}
 
   var docRef = null, writing = false, again = false;
   function persist(){
@@ -481,26 +439,20 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
   function queueWrite(){
     if (writing){ again = true; return; }
     writing = true;
-    var body = JSON.parse(JSON.stringify(state));
-    docRef.set(body).then(function(){
+    docRef.set(JSON.parse(JSON.stringify(state))).then(function(){
       setStatus("Saved to her account.");
     }).catch(function(err){
       setStatus(err && err.code === "quota_exceeded" ? "Storage is full. Delete old entries to keep saving." : "Couldn’t save to her account just now; saved on this device.");
-    }).then(function(){
-      writing = false;
-      if (again){ again = false; queueWrite(); }
-    });
+    }).then(function(){ writing = false; if (again){ again = false; queueWrite(); } });
   }
   function setStatus(t){ document.getElementById("status").textContent = t; }
 
   (async function connect(){
     try {
       if (!window.claude || !window.claude.use) return;
-      var db = await window.claude.use("db");
-      var user = await window.claude.use("user");
+      var db = await window.claude.use("db"), user = await window.claude.use("user");
       if (!db || !user) return;
-      var uid = await user.id();
-      if (!uid) return;
+      var uid = await user.id(); if (!uid) return;
       docRef = db.doc("data/users/" + uid + "/plan");
       var first = true;
       docRef.onSnapshot(function(snap){
@@ -508,13 +460,9 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
           if (snap.metadata && snap.metadata.hasPendingWrites) return;
           state = normalize(snap.data());
           try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch(e){}
-          renderAll();
-          setStatus("Saved to her account.");
-        } else if (first && state.entries.length){
-          queueWrite();
-        } else {
-          setStatus("Saved to her account.");
-        }
+          renderAll(); setStatus("Saved to her account.");
+        } else if (first && state.entries.length){ queueWrite(); }
+        else { setStatus("Saved to her account."); }
         first = false;
       }, function(){ docRef = null; setStatus("Saving on this device."); });
     } catch(e){ docRef = null; }
@@ -536,54 +484,153 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
       .sort(function(a,b){ return (a.date + a.id) < (b.date + b.id) ? -1 : 1; });
   }
   function lastEntry(id, tier){ var l = entriesFor(id, tier); return l[l.length-1] || null; }
-  function primerReps(){
-    var e = lastEntry("primer","P");
-    if (!e) return 2;
-    var n = Number(e.s1) || 2;
-    return (Number(e.s2) >= 5) ? n + 1 : n;
-  }
   function fmtDate(d){
     var p = (d||"").split("-"); if (p.length !== 3) return d;
-    var dt = new Date(+p[0], +p[1]-1, +p[2]);
-    return dt.toLocaleDateString(undefined, {month:"short", day:"numeric"});
+    return new Date(+p[0], +p[1]-1, +p[2]).toLocaleDateString(undefined, {month:"short", day:"numeric"});
   }
-  function today(){
-    var d = new Date(); var m = d.getMonth()+1, day = d.getDate();
-    return d.getFullYear() + "-" + (m<10?"0":"") + m + "-" + (day<10?"0":"") + day;
+  function fmtW(w){ return (Math.round(w*10)/10) + " lb"; }
+  function joinList(a){ return a.length === 1 ? String(a[0]) : a.slice(0,-1).join(", ") + " and " + a[a.length-1]; }
+  function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function range(id, tier){
+    var l = LIFTS[id];
+    if (l.kind === "neg") return [3,5];
+    if (tier === "H") return state.stage === "late" ? [6,8] : [5,6];
+    if (tier === "M") return [8,10];
+    return l.uni ? [10,12] : [15,20];
   }
+
   function describe(e){
     var l = LIFTS[e.lift];
-    if (l.kind === "primer") return "5 rounds of " + e.s1 + ", " + e.s2 + " of 5 clean";
-    var load = l.kind === "wt" ? (e.load ? e.load + " lb" : "No weight") :
-               l.kind === "neg" ? (e.load ? e.load + " sec lowering" : "Bodyweight") :
-               (e.load ? e.load : "Incline");
-    return load + ", " + e.s1 + " and " + e.s2 + " reps";
+    if (l.kind === "primer") return "5 rounds of " + e.reps + ", " + e.rounds + " of 5 clean";
+    var load = l.kind === "wt" ? (num(e.load) != null ? fmtW(num(e.load)) : "No weight noted") :
+               l.kind === "neg" ? (num(e.load) != null ? e.load + "-sec lowering" : "Bodyweight") :
+               (e.load ? cap(e.load) : "Incline not noted");
+    return load + ", " + e.sets.length + (e.sets.length === 1 ? " set: " : " sets: ") + joinList(e.sets) + " reps" + (l.uni ? " per arm" : "");
   }
-  function advice(id, tier){
-    var e = lastEntry(id, tier), l = LIFTS[id];
-    if (!e) return {text:"Log a session to get a suggestion.", cls:""};
+
+  // ---------- Targets and suggestions ----------
+  function k2(id, t){ return id + "|" + t; }
+  function sk(e){ return e.date + "|" + e.id; }
+  function minSet(e){ return Math.min.apply(null, e.sets); }
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+  function initialTarget(id, t, e){
+    var l = LIFTS[id];
+    if (l.kind === "primer") return {load:"", reps:e.reps, from:""};
+    var r = range(id, t);
+    return {load:e.load, reps:clamp(minSet(e), r[0], r[1]), from:""};
+  }
+  function targetOf(id, t){
+    var tg = state.targets[k2(id, t)];
+    if (tg) return tg;
+    var es = entriesFor(id, t);
+    return es.length ? initialTarget(id, t, es[0]) : null;
+  }
+  function since(id, t, tg){
+    return entriesFor(id, t).filter(function(e){ return !tg.from || sk(e) > tg.from; });
+  }
+  function hits(e, tg, l){
+    if (l.kind === "primer") return e.reps >= tg.reps && e.rounds >= 5;
+    if (e.sets.length < 2 || minSet(e) < tg.reps) return false;
+    if (l.kind === "pu") return true;
+    var a = num(e.load), b = num(tg.load);
+    return b == null || (a != null && a >= b);
+  }
+  function streak(id, t, tg){
+    var es = since(id, t, tg), l = LIFTS[id], n = 0;
+    for (var i = es.length - 1; i >= 0; i--){ if (hits(es[i], tg, l)) n++; else break; }
+    return n;
+  }
+  function fmtTarget(id, tg){
+    var l = LIFTS[id], per = LIFTS[id].uni ? " per arm" : "";
+    if (l.kind === "primer") return "5 rounds of " + tg.reps;
+    var load = l.kind === "wt" ? (num(tg.load) != null ? fmtW(num(tg.load)) : "Weight not set") :
+               l.kind === "neg" ? (num(tg.load) != null ? tg.load + "-sec lowering" : "3-sec lowering") :
+               (tg.load ? cap(tg.load) : "Incline not set");
+    return load + ", " + tg.reps + " reps" + per;
+  }
+  // Category rules: strength adds weight; hypertrophy and endurance add reps to the top of the range, then weight.
+  function suggestion(id, t){
+    var l = LIFTS[id], key = k2(id, t), tg = targetOf(id, t);
+    if (!tg) return null;
+    var es = since(id, t, tg); if (!es.length) return null;
+    var last = es[es.length-1];
+    if (state.dismissed[key] === last.id) return null;
     if (l.kind === "primer"){
-      var n = Number(e.s1)||0, r = Number(e.s2)||0;
-      if (r >= 5) return {text:"Try 5 rounds of " + (n+1) + ".", cls:"up"};
-      return {text:"Stay at 5 rounds of " + n + " until all 5 are clean.", cls:""};
+      if (streak(id, t, tg) >= 2) return {dir:"up", label:"Add a rep", load:"", reps:tg.reps + 1, why:"All 5 rounds clean in 2 sessions."};
+      return null;
     }
-    var rg = range(id, tier), a = Number(e.s1)||0, b = Number(e.s2)||0;
-    var top = a >= rg[1] && b >= rg[1], low = a < rg[0] || b < rg[0];
+    var r = range(id, t), mn = minSet(last), step = state.steps[l.equip] || 5, w = num(tg.load);
+    if (mn < r[0]){
+      if (l.kind === "wt" && w != null && w > 0) return {dir:"down", label:"Lighten", load:String(Math.max(0, w - step)), reps:r[0], why:"Fell below " + r[0] + " reps last time."};
+      if (l.kind === "neg") return {dir:"down", label:"Shorter lowering", load:String(Math.max(2, (w || 3) - 1)), reps:r[0], why:"Fell below " + r[0] + " reps last time."};
+      if (l.kind === "pu") return {dir:"down", label:"Raise the incline", load:"one step higher than " + (tg.load || "last time"), reps:r[0], why:"Fell below " + r[0] + " reps last time."};
+      return null;
+    }
+    var st = streak(id, t, tg), above = hits(last, tg, l) && mn > r[1];
+    if (st < 2 && !above) return null;
+    var why = above ? "Went past the top of the " + TIER_NAME[t].toLowerCase() + " range." : "Hit the target 2 sessions in a row.";
     if (l.kind === "neg"){
-      var sec = Number(e.load)||0;
-      if (top && sec >= 5) return {text:"Add a band-assisted full rep, or lower for 6 seconds.", cls:"up"};
-      if (top) return {text:"Lower one second slower next time.", cls:"up"};
-      if (low) return {text:"Shorten the lowering a little and rebuild reps.", cls:"down"};
-      return {text:"Same tempo, aim for one more rep.", cls:""};
+      var sec = w || 3;
+      if (sec < 6) return {dir:"up", label:"Slower lowering", load:String(sec + 1), reps:tg.reps, why:why};
+      if (tg.reps < r[1]) return {dir:"up", label:"Add a rep", load:String(sec), reps:tg.reps + 1, why:why};
+      return {dir:"up", label:"Add a band-assisted full rep", load:String(sec), reps:tg.reps, why:why + " Add one band-assisted full pull-up to each set."};
     }
-    if (l.kind === "pu"){
-      if (top) return {text:"Lower the incline one step.", cls:"up"};
-      if (low) return {text:"Raise the incline one step.", cls:"down"};
-      return {text:"Same incline, aim for one more rep.", cls:""};
+    var addReps = t === "E" && !l.uni ? 2 : 1;
+    if (t !== "H" && tg.reps < r[1]){
+      return {dir:"up", label:"Add reps", load:tg.load, reps:Math.min(r[1], tg.reps + addReps), why:why};
     }
-    if (top) return {text:"Go up one weight step.", cls:"up"};
-    if (low) return {text:"Below the range. Drop one step and rebuild.", cls:"down"};
-    return {text:"Same weight, aim for one more rep.", cls:""};
+    if (l.kind === "pu") return {dir:"up", label:"Lower the incline", load:"one step lower than " + (tg.load || "last time"), reps:r[0], why:why};
+    if (w == null) return null;
+    return {dir:"up", label:"Increase weight", load:String(w + step), reps:r[0], why:why};
+  }
+  function acceptSuggestion(id, t, batch){
+    var sg = suggestion(id, t); if (!sg) return false;
+    var es = entriesFor(id, t), last = es[es.length-1];
+    state.targets[k2(id, t)] = {load:sg.load, reps:sg.reps, from:sk(last)};
+    delete state.dismissed[k2(id, t)];
+    if (!batch){ persist(); renderAll(); }
+    return true;
+  }
+  function todaysPairs(){
+    var out = [["primer","P"]];
+    WORKOUTS[state.current].forEach(function(r){ r.forEach(function(id, j){ out.push([id, TIERS[j]]); }); });
+    return out;
+  }
+  document.getElementById("applyAll").addEventListener("click", function(){
+    var n = 0;
+    todaysPairs().forEach(function(p){ if (acceptSuggestion(p[0], p[1], true)) n++; });
+    if (n){ persist(); renderAll(); }
+  });
+  function dismissSuggestion(id, t){
+    var es = entriesFor(id, t); if (!es.length) return;
+    state.dismissed[k2(id, t)] = es[es.length-1].id; persist(); renderAll();
+  }
+
+  // Box shown on the Workout tab
+  function targetBox(id, t){
+    var tg = targetOf(id, t), sg = suggestion(id, t), l = LIFTS[id];
+    if (!tg){
+      var r = l.kind === "primer" ? null : range(id, t);
+      return el("div", {class:"rx new"}, [
+        el("span", {class:"badge new", text:"First session"}),
+        el("div", {class:"rx-main", text: l.kind === "primer" ? "5 rounds of 2" : (l.kind === "wt" ? "Pick a weight" : l.kind === "neg" ? "3-sec lowering" : "Pick an incline") + ", " + r[0] + "–" + r[1] + " reps" + (l.uni ? " per arm" : "")}),
+        el("div", {class:"rx-sub", text:"Log it and this becomes her target."})
+      ]);
+    }
+    var st = streak(id, t, tg);
+    var sub = sg ? sg.label + ". " + sg.why : "Hit " + Math.min(st, 2) + " of 2 sessions in a row.";
+    var kids = [
+      el("span", {class:"badge " + (sg ? sg.dir : ""), text: sg ? "Change suggested" : "Target"}),
+      el("div", {class:"rx-main", text:fmtTarget(id, tg)}),
+      el("div", {class:"rx-sub", text:sub})
+    ];
+    if (sg){
+      var up = el("button", {class:"btn small primary", style:"margin-top:8px", text:"Update to " + fmtTarget(id, {load:sg.load, reps:sg.reps})});
+      up.addEventListener("click", function(){ acceptSuggestion(id, t); });
+      kids.push(up);
+    }
+    return el("div", {class:"rx " + (sg ? sg.dir : "hold")}, kids);
   }
 
   // ---------- Tabs ----------
@@ -599,193 +646,57 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
   tabP.addEventListener("click", function(){ showTab("prog"); });
   [tabW, tabP].forEach(function(t){
     t.addEventListener("keydown", function(ev){
-      if (ev.key === "ArrowRight" || ev.key === "ArrowLeft"){
-        var other = t === tabW ? tabP : tabW; other.focus(); other.click();
-      }
+      if (ev.key === "ArrowRight" || ev.key === "ArrowLeft"){ var o = t === tabW ? tabP : tabW; o.focus(); o.click(); }
     });
   });
 
   // ---------- Workout tab ----------
-  var picker = document.getElementById("picker"), changeBtn = document.getElementById("changeBtn");
-  changeBtn.addEventListener("click", function(){
-    setWorkout(nextOf(state.current));
-  });
-  document.getElementById("finishBtn").addEventListener("click", function(){
-    setWorkout(nextOf(state.current));
-    window.scrollTo(0,0);
-  });
   function setWorkout(w){
     if (w === state.current) return;
     state.current = w; persist(); renderAll();
     var L = document.getElementById("bigLetter");
     L.classList.add("swap"); setTimeout(function(){ L.classList.remove("swap"); }, 200);
   }
+  document.getElementById("changeBtn").addEventListener("click", function(){ setWorkout(nextOf(state.current)); });
+  document.getElementById("finishBtn").addEventListener("click", function(){ setWorkout(nextOf(state.current)); window.scrollTo(0,0); });
 
   function renderWorkout(){
     var w = state.current, n = nextOf(w);
     document.getElementById("bigLetter").textContent = w;
     document.getElementById("heroTitle").textContent = "Workout " + w;
-    document.getElementById("heroSub").textContent = "45 minutes. Next time: Workout " + n + ".";
+    var ups = suggestion("primer","P") ? 1 : 0;
+    WORKOUTS[w].forEach(function(r){ r.forEach(function(id, j){ if (suggestion(id, TIERS[j])) ups++; }); });
+    document.getElementById("heroSub").textContent = "45 minutes. " +
+      (ups ? ups + (ups === 1 ? " target is" : " targets are") + " ready to update." : "Next time: Workout " + n + ".");
+    var aa = document.getElementById("applyAll");
+    aa.hidden = !ups;
+    aa.textContent = ups === 1 ? "Update 1 target" : "Update all " + ups + " targets";
     document.getElementById("finishBtn").textContent = "Finish and move to " + n;
-    document.getElementById("primerTarget").textContent = "5 rounds of " + primerReps();
 
-    picker.innerHTML = "";
-    ORDER.forEach(function(k){
-      var heavies = WORKOUTS[k].map(function(r){ return LIFTS[r[0]].name; }).join(", ");
-      var b = el("button", {class:"pick", "aria-pressed": String(k === w)}, [
-        el("b", {text:k}), el("span", {text:"Starts with " + heavies.split(", ")[0].toLowerCase()})
-      ]);
-      b.addEventListener("click", function(){
-        setWorkout(k); picker.classList.remove("open"); changeBtn.setAttribute("aria-expanded","false");
-      });
-      picker.appendChild(b);
-    });
+    var pr = document.getElementById("primerRx"); pr.innerHTML = ""; pr.appendChild(targetBox("primer","P"));
 
     var host = document.getElementById("rounds"); host.innerHTML = "";
     WORKOUTS[w].forEach(function(round, i){
-      var box = el("div", {class:"round"}, [
-        el("div", {class:"round-head"}, ["Round " + (i+1), el("span", {text:"2 sets"})])
-      ]);
+      var box = el("div", {class:"round"}, [el("div", {class:"round-head"}, ["Round " + (i+1), el("span", {text:"2 sets"})])]);
       round.forEach(function(id, j){
-        var t = TIERS[j], l = LIFTS[id];
+        var t = TIERS[j], l = LIFTS[id], last = lastEntry(id, t);
         var info = el("div", null, [
           el("div", {class:"lift-name", text:l.name}),
-          el("div", {class:"lift-reps", text:targetText(id, t).replace("2 sets of ","")}),
+          targetBox(id, t),
+          last ? el("div", {class:"last", text:"Last (" + fmtDate(last.date) + "): " + describe(last)}) : null,
           l.cue ? el("div", {class:"lift-cue", text:l.cue}) : null,
           l.swap ? el("div", {class:"lift-swap", text:l.swap}) : null
         ]);
-        var btn = el("button", {class:"btn small", "data-log": id + "|" + t, text:"Log"});
-        box.appendChild(el("div", {class:"lift"}, [el("span", {class:"tier " + t, text:TIER_NAME[t]}), info, btn]));
+        box.appendChild(el("div", {class:"lift"}, [
+          el("span", {class:"tier " + t, text:TIER_NAME[t]}), info,
+          el("button", {class:"btn small", "data-log": id + "|" + t, text:"Log"})
+        ]));
       });
       host.appendChild(box);
     });
   }
 
-  // ---------- Progression tab ----------
-  var view = "today", openHist = {};
-  function renderSegs(){
-    var vs = document.getElementById("viewSeg"); vs.innerHTML = "";
-    [["today","Workout " + state.current + " lifts"],["all","All lifts"]].forEach(function(o){
-      var b = el("button", {"aria-pressed": String(view === o[0]), text:o[1]});
-      b.addEventListener("click", function(){ view = o[0]; renderProg(); });
-      vs.appendChild(b);
-    });
-    Array.prototype.forEach.call(document.querySelectorAll("#stageSeg button"), function(b){
-      b.setAttribute("aria-pressed", String(b.dataset.stage === state.stage));
-    });
-  }
-  document.getElementById("stageSeg").addEventListener("click", function(ev){
-    var b = ev.target.closest("button"); if (!b) return;
-    if (state.stage !== b.dataset.stage){ state.stage = b.dataset.stage; persist(); renderAll(); }
-  });
-
-  function rowsToShow(){
-    var rows = [["primer","P"]];
-    if (view === "today"){
-      WORKOUTS[state.current].forEach(function(r){ r.forEach(function(id, j){ rows.push([id, TIERS[j]]); }); });
-    } else {
-      var seen = {};
-      ["neg","row","gor","chest","sp","vrow","pu","fp","tp"].forEach(function(id){
-        TIERS.forEach(function(t){
-          ORDER.forEach(function(w){ WORKOUTS[w].forEach(function(r){
-            if (r[TIERS.indexOf(t)] === id && !seen[id+t]){ seen[id+t]=1; rows.push([id,t]); }
-          }); });
-        });
-      });
-    }
-    return rows;
-  }
-
-  function renderProg(){
-    renderSegs();
-    var body = document.getElementById("progBody"); body.innerHTML = "";
-    rowsToShow().forEach(function(pair){
-      var id = pair[0], t = pair[1], l = LIFTS[id], key = id + "|" + t;
-      var last = lastEntry(id, t), adv = advice(id, t);
-      var hb = el("button", {class:"btn small ghost", "aria-expanded": String(!!openHist[key]), text: openHist[key] ? "Hide history" : "History"});
-      hb.addEventListener("click", function(){ openHist[key] = !openHist[key]; renderProg(); });
-      var tr = el("tr", {class:"row"}, [
-        el("td", {"data-l":""}, [
-          el("div", {class:"lift-name", text:l.name}),
-          el("span", {class:"tier " + t, text:TIER_NAME[t], style:"display:inline-block;margin-top:4px"})
-        ]),
-        el("td", {"data-l":"Target", text:targetText(id, t)}),
-        el("td", {"data-l":"Last session"}, [
-          last ? el("div", {text:describe(last)}) : el("span", {class:"empty", text:"Nothing logged yet"}),
-          last ? el("div", {class:"muted", style:"font-size:14px", text:fmtDate(last.date)}) : null
-        ]),
-        el("td", {"data-l":"Next time"}, [el("span", {class:"next " + adv.cls, text:adv.text})]),
-        el("td", null, [el("div", {class:"acts"}, [
-          el("button", {class:"btn small primary", "data-log": key, text:"Log"}), hb
-        ])])
-      ]);
-      body.appendChild(tr);
-      if (openHist[key]){
-        var list = entriesFor(id, t).slice().reverse();
-        var ul = el("ul");
-        if (!list.length) ul.appendChild(el("li", {class:"empty", text:"No entries yet."}));
-        list.forEach(function(e){
-          var del = el("button", {class:"btn small ghost danger", text:"Delete", "aria-label":"Delete entry from " + fmtDate(e.date)});
-          del.addEventListener("click", function(){
-            state.entries = state.entries.filter(function(x){ return x.id !== e.id; });
-            persist(); renderAll();
-          });
-          ul.appendChild(el("li", null, [el("span", null, [el("b", {text:fmtDate(e.date) + "  "}), describe(e)]), del]));
-        });
-        body.appendChild(el("tr", {class:"hist"}, [el("td", {colspan:"5"}, [ul])]));
-      }
-    });
-  }
-
-  // ---------- Log dialog ----------
-  var dlg = document.getElementById("logDlg"), form = document.getElementById("logForm"), cur = null;
-  document.addEventListener("click", function(ev){
-    var b = ev.target.closest("[data-log]"); if (!b) return;
-    var p = b.getAttribute("data-log").split("|"); openLog(p[0], p[1]);
-  });
-  function openLog(id, t){
-    cur = {id:id, t:t};
-    var l = LIFTS[id], last = lastEntry(id, t);
-    document.getElementById("dlgTitle").textContent = l.name;
-    document.getElementById("dlgSub").textContent = (t === "P" ? "" : TIER_NAME[t] + ": ") + targetText(id, t);
-    var loadF = document.getElementById("fLoad"), loadL = document.getElementById("fLoadLbl");
-    var loadWrap = loadF.parentNode;
-    document.getElementById("fDate").value = today();
-    document.getElementById("fErr").textContent = "";
-    loadWrap.hidden = false;
-    if (l.kind === "wt"){ loadL.textContent = "Weight (lb)" + (l.uni ? ", per dumbbell or stack" : ""); loadF.type = "number"; loadF.inputMode = "decimal"; loadF.step = "0.5"; }
-    else if (l.kind === "neg"){ loadL.textContent = "Lowering time (seconds)"; loadF.type = "number"; loadF.inputMode = "numeric"; loadF.step = "1"; }
-    else if (l.kind === "pu"){ loadL.textContent = "Incline (for example: bench, box, frame bar 3)"; loadF.type = "text"; loadF.removeAttribute("step"); }
-    else { loadWrap.hidden = true; }
-    document.getElementById("fS1Lbl").textContent = l.kind === "primer" ? "Reps per round" : "Set 1 reps" + (l.uni ? " (per arm)" : "");
-    document.getElementById("fS2Lbl").textContent = l.kind === "primer" ? "Clean rounds (of 5)" : "Set 2 reps" + (l.uni ? " (per arm)" : "");
-    loadF.value = last && last.load ? last.load : "";
-    document.getElementById("fS1").value = "";
-    document.getElementById("fS2").value = l.kind === "primer" ? "5" : "";
-    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open","");
-    setTimeout(function(){ (loadWrap.hidden ? document.getElementById("fS1") : loadF).focus(); }, 30);
-  }
-  function closeDlg(){ if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); }
-  document.getElementById("dlgCancel").addEventListener("click", closeDlg);
-  form.addEventListener("submit", function(ev){
-    ev.preventDefault();
-    var l = LIFTS[cur.id];
-    var s1 = document.getElementById("fS1").value.trim(), s2 = document.getElementById("fS2").value.trim();
-    var load = document.getElementById("fLoad").value.trim(), date = document.getElementById("fDate").value || today();
-    var err = document.getElementById("fErr");
-    if (s1 === "" || s2 === ""){ err.textContent = l.kind === "primer" ? "Enter reps per round and clean rounds." : "Enter reps for both sets."; return; }
-    if (l.kind === "primer" && (Number(s2) > 5 || Number(s2) < 0)){ err.textContent = "Clean rounds should be between 0 and 5."; return; }
-    state.entries.push({
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-      date: date, lift: cur.id, tier: cur.t,
-      load: l.kind === "primer" ? "" : load.slice(0,40),
-      s1: Number(s1), s2: Number(s2)
-    });
-    persist(); closeDlg(); renderAll();
-  });
-
   // ---------- Core circuit ----------
-  var libDlg = document.getElementById("libDlg"), libSlot = 0;
   function renderCore(){
     var body = document.getElementById("coreBody"); body.innerHTML = "";
     state.core.forEach(function(id, i){
@@ -800,77 +711,183 @@ dialog.lib{width:min(560px,calc(100vw - 28px));max-height:86vh}
       ]));
     });
   }
-  function renderLib(){
-    var cur = state.core[libSlot], curItem = coreItem(cur);
-    document.getElementById("libTitle").textContent = "Swap station " + (libSlot+1);
-    document.getElementById("libSub").textContent = "Now: " + (curItem ? curItem.name : "");
-    var host = document.getElementById("libList"); host.innerHTML = "";
-    var cats = CORE_CATS.concat(state.custom.length ? ["Your own"] : []);
-    cats.forEach(function(cat){
-      var items = cat === "Your own" ? state.custom : CORE_LIB.filter(function(x){ return x.cat === cat; });
-      host.appendChild(el("div", {class:"lib-cat", text:cat}));
-      items.forEach(function(x){
-        var used = state.core.indexOf(x.id);
-        var b = el("button", {class:"lib-item", "aria-pressed": String(x.id === cur)}, [
-          el("div", null, [el("span", {class:"nm", text:x.name}), used >= 0 && x.id !== cur ? el("span", {class:"in", text:"Station " + (used+1)}) : null]),
-          el("div", {class:"wk", text:x.work + (x.cue ? ". " + x.cue : "")}),
-          x.note ? el("div", {class:"wk", text:x.note}) : null
-        ]);
-        b.addEventListener("click", function(){
-          state.core[libSlot] = x.id; persist(); closeLib(); renderAll();
-        });
-        var row = el("div", {class:"lib-row"}, [b]);
-        if (x.custom){
-          var d = el("button", {class:"btn small ghost danger", text:"Delete", "aria-label":"Delete " + x.name});
-          d.addEventListener("click", function(){
-            state.custom = state.custom.filter(function(c){ return c.id !== x.id; });
-            state.core = state.core.map(function(v, i){ return v === x.id ? CORE_DEFAULT[i] : v; });
-            persist(); renderAll(); renderLib();
-          });
-          row.appendChild(d);
-        }
-        host.appendChild(row);
-      });
-    });
-  }
-  function openLib(i){
-    libSlot = i; renderLib();
-    document.getElementById("cErr").textContent = "";
-    if (typeof libDlg.showModal === "function") libDlg.showModal(); else libDlg.setAttribute("open","");
-  }
-  function closeLib(){ if (libDlg.close) libDlg.close(); else libDlg.removeAttribute("open"); }
-  document.getElementById("libClose").addEventListener("click", closeLib);
-  document.addEventListener("click", function(ev){
-    var b = ev.target.closest("[data-swap]"); if (!b) return;
-    openLib(Number(b.getAttribute("data-swap")));
-  });
-  function pickOne(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+  function pickOne(a){ return a[Math.floor(Math.random() * a.length)]; }
   document.getElementById("coreShuffle").addEventListener("click", function(){
     var prev = state.core.join(","), next = prev;
-    for (var tries = 0; tries < 20 && next === prev; tries++){
-      var picks = CORE_CATS.map(function(cat){
-        return pickOne(CORE_LIB.filter(function(x){ return x.cat === cat; })).id;
-      });
-      next = picks.join(",");
+    for (var t = 0; t < 20 && next === prev; t++){
+      next = CORE_CATS.map(function(cat){ return pickOne(CORE_LIB.filter(function(x){ return x.cat === cat; })).id; }).join(",");
     }
-    state.core = next.split(",");
-    persist(); renderAll();
+    state.core = next.split(","); persist(); renderAll();
   });
-  document.getElementById("coreReset").addEventListener("click", function(){
-    state.core = CORE_DEFAULT.slice(); persist(); renderAll();
+  document.getElementById("coreReset").addEventListener("click", function(){ state.core = CORE_DEFAULT.slice(); persist(); renderAll(); });
+
+  // ---------- Progression tab ----------
+  var view = "today", openHist = {};
+  function seg(hostId, opts, isOn, onPick){
+    var h = document.getElementById(hostId); h.innerHTML = "";
+    opts.forEach(function(o){
+      var b = el("button", {"aria-pressed": String(isOn(o[0])), text:o[1]});
+      b.addEventListener("click", function(){ onPick(o[0]); });
+      h.appendChild(b);
+    });
+  }
+  function renderControls(){
+    seg("viewSeg", [["today","Workout " + state.current + " lifts"],["all","All lifts"]],
+        function(v){ return view === v; }, function(v){ view = v; renderProg(); });
+    Array.prototype.forEach.call(document.querySelectorAll("#stageSeg button"), function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.stage === state.stage));
+    });
+    seg("dbSeg", [[2.5,"2.5 lb"],[5,"5 lb"]], function(v){ return state.steps.db === v; },
+        function(v){ state.steps.db = v; persist(); renderAll(); });
+    seg("cableSeg", [[2.5,"2.5 lb"],[5,"5 lb"],[10,"10 lb"]], function(v){ return state.steps.cable === v; },
+        function(v){ state.steps.cable = v; persist(); renderAll(); });
+  }
+  document.getElementById("stageSeg").addEventListener("click", function(ev){
+    var b = ev.target.closest("button"); if (!b) return;
+    if (state.stage !== b.dataset.stage){ state.stage = b.dataset.stage; persist(); renderAll(); }
   });
-  document.getElementById("customForm").addEventListener("submit", function(ev){
+
+  function rowsToShow(){
+    var rows = [["primer","P"]];
+    if (view === "today"){
+      WORKOUTS[state.current].forEach(function(r){ r.forEach(function(id, j){ rows.push([id, TIERS[j]]); }); });
+    } else {
+      var seen = {};
+      ["neg","row","gor","chest","sp","vrow","pu","fp","tp"].forEach(function(id){
+        TIERS.forEach(function(t, ti){
+          ORDER.forEach(function(w){ WORKOUTS[w].forEach(function(r){
+            if (r[ti] === id && !seen[id+t]){ seen[id+t] = 1; rows.push([id, t]); }
+          }); });
+        });
+      });
+    }
+    return rows;
+  }
+
+  function progTarget(id, t){
+    var tg = targetOf(id, t), sg = suggestion(id, t);
+    if (!tg) return [el("span", {class:"empty", text:"Set by her first log"})];
+    var out = [el("div", {class:"lift-name", text:fmtTarget(id, tg)}),
+               el("div", {class:"muted", style:"font-size:14px", text: sg ? "" : "Hit " + Math.min(streak(id, t, tg), 2) + " of 2 sessions in a row"})];
+    if (sg){
+      var acc = el("button", {class:"btn small primary", text:"Accept"});
+      acc.addEventListener("click", function(){ acceptSuggestion(id, t); });
+      var no = el("button", {class:"btn small ghost", text:"Not yet"});
+      no.addEventListener("click", function(){ dismissSuggestion(id, t); });
+      out.push(el("div", {class:"rx " + sg.dir, style:"margin-top:8px"}, [
+        el("span", {class:"badge " + sg.dir, text:sg.label}),
+        el("div", {class:"rx-main", text:fmtTarget(id, {load:sg.load, reps:sg.reps})}),
+        el("div", {class:"rx-sub", text:sg.why}),
+        el("div", {class:"acts", style:"justify-content:flex-start;margin-top:8px"}, [acc, no])
+      ]));
+    }
+    return out;
+  }
+  function renderProg(){
+    renderControls();
+    var body = document.getElementById("progBody"); body.innerHTML = "";
+    rowsToShow().forEach(function(pair){
+      var id = pair[0], t = pair[1], l = LIFTS[id], key = id + "|" + t, last = lastEntry(id, t);
+      var hb = el("button", {class:"btn small ghost", "aria-expanded": String(!!openHist[key]), text: openHist[key] ? "Hide history" : "History"});
+      hb.addEventListener("click", function(){ openHist[key] = !openHist[key]; renderProg(); });
+      body.appendChild(el("tr", {class:"row"}, [
+        el("td", {"data-l":""}, [el("div", {class:"lift-name", text:l.name}), el("span", {class:"tier " + t, text:TIER_NAME[t], style:"margin-top:4px"})]),
+        el("td", {"data-l":"Last session"}, last ? [
+          el("div", {text:describe(last)}),
+          el("div", {class:"muted", style:"font-size:14px", text:fmtDate(last.date)})
+        ] : [el("span", {class:"empty", text:"Nothing logged yet"})]),
+        el("td", {"data-l":"Target"}, progTarget(id, t)),
+        el("td", null, [el("div", {class:"acts"}, [el("button", {class:"btn small primary", "data-log": key, text:"Log"}), hb])])
+      ]));
+      if (openHist[key]){
+        var list = entriesFor(id, t).slice().reverse(), ul = el("ul");
+        if (!list.length) ul.appendChild(el("li", {class:"empty", text:"No entries yet."}));
+        list.forEach(function(e){
+          var del = el("button", {class:"btn small ghost danger", text:"Delete", "aria-label":"Delete entry from " + fmtDate(e.date)});
+          del.addEventListener("click", function(){
+            state.entries = state.entries.filter(function(x){ return x.id !== e.id; }); persist(); renderAll();
+          });
+          ul.appendChild(el("li", null, [el("span", null, [el("b", {text:fmtDate(e.date) + "  "}), describe(e)]), del]));
+        });
+        body.appendChild(el("tr", {class:"hist"}, [el("td", {colspan:"4"}, [ul])]));
+      }
+    });
+  }
+
+  // ---------- Log dialog ----------
+  var dlg = document.getElementById("logDlg"), form = document.getElementById("logForm"), cur = null, setCount = 2;
+  var setsWrap = document.getElementById("setsWrap");
+  document.addEventListener("click", function(ev){
+    var b = ev.target.closest("[data-log]"); if (!b) return;
+    var p = b.getAttribute("data-log").split("|"); openLog(p[0], p[1]);
+  });
+  function buildSets(keep){
+    var old = keep ? Array.prototype.map.call(setsWrap.querySelectorAll("input"), function(i){ return i.value; }) : [];
+    setsWrap.innerHTML = "";
+    var uni = LIFTS[cur.id].uni;
+    for (var i = 0; i < setCount; i++){
+      var tgr = targetOf(cur.id, cur.t);
+      var inp = el("input", {type:"number", inputmode:"numeric", min:"0", max:"99", id:"fSet" + i, placeholder: tgr ? String(tgr.reps) : ""});
+      if (old[i] != null) inp.value = old[i];
+      setsWrap.appendChild(el("div", {class:"field"}, [el("label", {for:"fSet" + i, text:"Set " + (i+1) + " reps" + (uni ? " (per arm)" : "")}), inp]));
+    }
+    document.getElementById("rmSet").disabled = setCount <= 1;
+    document.getElementById("addSet").disabled = setCount >= 4;
+  }
+  function openLog(id, t){
+    cur = {id:id, t:t};
+    var l = LIFTS[id], tg = targetOf(id, t), last = lastEntry(id, t);
+    var r0 = l.kind === "primer" ? null : range(id, t);
+    document.getElementById("dlgTitle").textContent = l.name;
+    document.getElementById("dlgSub").textContent = (t === "P" ? "" : TIER_NAME[t] + ". ") +
+      (tg ? "Target: " + fmtTarget(id, tg) + "." : (r0 ? "Range: " + r0[0] + "–" + r0[1] + " reps" + (l.uni ? " per arm" : "") + "." : ""));
+    document.getElementById("fDate").value = today();
+    document.getElementById("fErr").textContent = "";
+    var loadWrap = document.getElementById("loadWrap"), loadF = document.getElementById("fLoad"), loadL = document.getElementById("fLoadLbl");
+    var tools = document.getElementById("setTools");
+    loadWrap.hidden = l.kind === "primer"; tools.hidden = l.kind === "primer";
+    if (l.kind === "wt"){ loadL.textContent = "Weight (lb)" + (l.uni ? ", per dumbbell or cable" : ""); loadF.type = "number"; loadF.inputMode = "decimal"; loadF.step = "0.5"; }
+    else if (l.kind === "neg"){ loadL.textContent = "Lowering time (seconds)"; loadF.type = "number"; loadF.inputMode = "numeric"; loadF.step = "1"; }
+    else if (l.kind === "pu"){ loadL.textContent = "Incline (for example: bench, box, frame bar 3)"; loadF.type = "text"; loadF.removeAttribute("step"); }
+    var tl = tg && tg.load && !/^one step/.test(tg.load) ? tg.load : (last && last.load ? last.load : (l.kind === "neg" ? "3" : ""));
+    loadF.value = tl;
+    if (l.kind === "primer"){
+      setsWrap.innerHTML = "";
+      setsWrap.appendChild(el("div", {class:"field"}, [el("label", {for:"fPR", text:"Reps per round"}), el("input", {type:"number", inputmode:"numeric", min:"0", max:"20", id:"fPR"})]));
+      setsWrap.appendChild(el("div", {class:"field"}, [el("label", {for:"fPN", text:"Clean rounds (of 5)"}), el("input", {type:"number", inputmode:"numeric", min:"0", max:"5", id:"fPN"})]));
+      document.getElementById("fPR").value = tg ? tg.reps : 2;
+      document.getElementById("fPN").value = 5;
+    } else {
+      setCount = 2; buildSets(false);
+    }
+    if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open","");
+    setTimeout(function(){ var f = setsWrap.querySelector("input"); if (f && l.kind !== "wt") f.focus(); else loadF.focus(); }, 30);
+  }
+  document.getElementById("addSet").addEventListener("click", function(){ if (setCount < 4){ setCount++; buildSets(true); } });
+  document.getElementById("rmSet").addEventListener("click", function(){ if (setCount > 1){ setCount--; buildSets(true); } });
+  function closeDlg(){ if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); }
+  document.getElementById("dlgCancel").addEventListener("click", closeDlg);
+  form.addEventListener("submit", function(ev){
     ev.preventDefault();
-    var name = document.getElementById("cName").value.trim();
-    if (!name){ document.getElementById("cErr").textContent = "Give the exercise a name."; return; }
-    if (state.custom.length >= 40){ document.getElementById("cErr").textContent = "That’s 40 custom exercises. Delete one to add another."; return; }
-    var item = {id:"c_" + Date.now().toString(36) + Math.random().toString(36).slice(2,5), cat:"Your own",
-      name:name.slice(0,60), work:document.getElementById("cWork").value,
-      cue:document.getElementById("cCue").value.trim().slice(0,140), note:"", custom:true};
-    state.custom.push(item);
-    state.core[libSlot] = item.id;
-    document.getElementById("cName").value = ""; document.getElementById("cCue").value = "";
-    persist(); closeLib(); renderAll();
+    var l = LIFTS[cur.id], err = document.getElementById("fErr");
+    var date = document.getElementById("fDate").value || today();
+    var entry = {id:rid(), date:date, lift:cur.id, tier:cur.t, load:""};
+    if (l.kind === "primer"){
+      var r = num(document.getElementById("fPR").value), n = num(document.getElementById("fPN").value);
+      if (r == null || n == null){ err.textContent = "Enter reps per round and clean rounds."; return; }
+      if (n < 0 || n > 5){ err.textContent = "Clean rounds should be between 0 and 5."; return; }
+      entry.reps = r; entry.rounds = n;
+    } else {
+      var sets = Array.prototype.map.call(setsWrap.querySelectorAll("input"), function(i){ return num(i.value); });
+      if (sets.some(function(v){ return v == null; })){ err.textContent = "Enter reps for every set, or remove the empty one."; return; }
+      var load = document.getElementById("fLoad").value.trim();
+      if (l.kind === "wt" && load === ""){ err.textContent = "Enter the weight so the next target can be worked out."; return; }
+      entry.load = load.slice(0,40); entry.sets = sets;
+    }
+    state.entries.push(entry);
+    var kk = k2(cur.id, cur.t);
+    if (!state.targets[kk]){ var first = entriesFor(cur.id, cur.t)[0]; state.targets[kk] = initialTarget(cur.id, cur.t, first); }
+    persist(); closeDlg(); renderAll();
   });
 
   function renderAll(){ renderWorkout(); renderCore(); renderProg(); }
