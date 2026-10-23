@@ -198,7 +198,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
           <li>Arm circles and swings</li>
           <li>Incline scap push-ups</li>
           <li>Light cable face pulls</li>
-          <li>Dead hang or scap pull-ups (switch to a lat stretch from the 2nd trimester)</li>
+          <li>Dead hang or scap pull-ups</li>
         </ul>
       </div>
     </div>
@@ -253,7 +253,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
           <button class="btn small primary" id="coreShuffle">Shuffle circuit</button>
           <button class="btn small ghost" id="coreReset">Reset to original circuit</button>
         </div>
-        <p class="muted" style="margin-top:10px">Shuffle for a new balanced circuit. Exhale on every effort. If the belly cones along the midline, switch to the easier version.</p>
+        <p class="muted" style="margin-top:10px">Shuffle for a new balanced circuit. Exhale on every effort. If the abs dome along the midline, switch to the easier version.</p>
       </div>
     </div>
   </section>
@@ -269,7 +269,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       <div class="control"><span class="lbl" id="lbl-stage">Strength rep range</span>
         <div class="seg" role="group" aria-labelledby="lbl-stage" id="stageSeg">
           <button data-stage="early">5–6 reps</button>
-          <button data-stage="late">6–8 reps, 2nd and 3rd trimester</button>
+          <button data-stage="late">6–8 reps</button>
         </div></div>
       <div class="control"><span class="lbl" id="lbl-db">Dumbbell jumps</span>
         <div class="seg" role="group" aria-labelledby="lbl-db" id="dbSeg"></div></div>
@@ -313,23 +313,23 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   var LIFTS = {
     neg:   {name:"Pull-up negatives", kind:"neg", equip:"bar", uni:false,
             cue:"Step up from a box, lower for the set time, step down. Don’t drop.",
-            swap:"From the 2nd trimester: switch to a cable lat pulldown."},
+            swap:""},
     row:   {name:"Single-arm DB row", kind:"wt", equip:"db", uni:true,
             cue:"Hand braced on the bench, pull the elbow toward the hip.",
             swap:"If bending gets awkward, brace on a bench set to a low incline."},
     gor:   {name:"Gorilla row", kind:"wt", equip:"db", uni:true,
             cue:"Hinged with a dumbbell in each hand, alternate arms.",
-            swap:"As the belly grows: seated cable row or split-stance single-arm cable row."},
+            swap:"Alternative: seated cable row or split-stance single-arm cable row."},
     chest: {name:"Single-arm cable chest press", kind:"wt", equip:"cable", uni:true,
             cue:"Standing, split stance. Don’t let the torso twist toward the cable.", swap:""},
     sp:    {name:"Single-arm DB shoulder press", kind:"wt", equip:"db", uni:true,
             cue:"Half-kneeling, ribs down, no lower-back arch.",
-            swap:"Later in pregnancy: seated with back support."},
+            swap:"Alternative: seated with back support."},
     vrow:  {name:"Single-arm cable vertical row", kind:"wt", equip:"cable", uni:true,
             cue:"Pull up along the body; elbow no higher than the shoulder.", swap:""},
     pu:    {name:"Incline push-ups", kind:"pu", equip:"body", uni:false,
             cue:"Hands on a bench or the machine frame.",
-            swap:"Raise the incline as the belly grows. Stop if the belly cones."},
+            swap:"Raise the incline if form starts to break down."},
     fp:    {name:"Cable face pull", kind:"wt", equip:"cable", uni:false,
             cue:"Rope toward the forehead, elbows high, squeeze the shoulder blades.", swap:""},
     tp:    {name:"Single-arm cable tricep pushdown", kind:"wt", equip:"cable", uni:true,
@@ -347,17 +347,17 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   var CORE_CATS = ["Anti-rotation","Anti-extension","Side and lateral","Hips and pelvic floor","Balance"];
   var CORE_LIB = [
     {id:"birddog", cat:"Anti-rotation", name:"Bird dog", work:"40 sec", cue:"Reach opposite arm and leg long, pause, switch slowly.", note:""},
-    {id:"pallof", cat:"Anti-rotation", name:"Half-kneeling cable Pallof press", work:"20 sec per side", cue:"Press straight out and back without letting the cable turn you.", note:"Later in pregnancy: do it seated or standing."},
+    {id:"pallof", cat:"Anti-rotation", name:"Half-kneeling cable Pallof press", work:"20 sec per side", cue:"Press straight out and back without letting the cable turn you.", note:"Easier: do it seated or standing."},
     {id:"pallofhold", cat:"Anti-rotation", name:"Split-stance Pallof hold", work:"20 sec per side", cue:"Arms extended, hold still against the cable.", note:""},
-    {id:"taps", cat:"Anti-rotation", name:"Incline shoulder taps", work:"40 sec", cue:"Hands on a bench, feet wide, tap without the hips rocking.", note:"Raise the incline as the belly grows."},
-    {id:"inclineplank", cat:"Anti-extension", name:"Incline plank", work:"40 sec", cue:"Hands on a bench, straight line head to heels, ribs down.", note:"Raise the incline as the belly grows."},
-    {id:"bear", cat:"Anti-extension", name:"Bear hold", work:"40 sec", cue:"On hands and knees, lift the knees an inch, back flat.", note:"Keep the knees down if the belly cones."},
-    {id:"deadbug", cat:"Anti-extension", name:"Incline dead bug", work:"40 sec", cue:"Back on an inclined bench, lower opposite arm and leg slowly.", note:"The incline avoids lying flat."},
-    {id:"sideplank", cat:"Side and lateral", name:"Side plank, knees or full", work:"20 sec per side", cue:"Hips high, body in one line.", note:"Later in pregnancy: stay on the knees."},
+    {id:"taps", cat:"Anti-rotation", name:"Incline shoulder taps", work:"40 sec", cue:"Hands on a bench, feet wide, tap without the hips rocking.", note:""},
+    {id:"inclineplank", cat:"Anti-extension", name:"Incline plank", work:"40 sec", cue:"Hands on a bench, straight line head to heels, ribs down.", note:""},
+    {id:"bear", cat:"Anti-extension", name:"Bear hold", work:"40 sec", cue:"On hands and knees, lift the knees an inch, back flat.", note:"Easier: keep the knees down."},
+    {id:"deadbug", cat:"Anti-extension", name:"Incline dead bug", work:"40 sec", cue:"Back on an inclined bench, lower opposite arm and leg slowly.", note:""},
+    {id:"sideplank", cat:"Side and lateral", name:"Side plank, knees or full", work:"20 sec per side", cue:"Hips high, body in one line.", note:"Easier: stay on the knees."},
     {id:"suitcase", cat:"Side and lateral", name:"Suitcase march", work:"20 sec per side", cue:"One dumbbell at the side, march in place without leaning.", note:"Lighten the weight as balance shifts."},
     {id:"carry", cat:"Side and lateral", name:"Single-arm carry", work:"20 sec per side", cue:"Walk tall with one dumbbell; don’t lean toward it.", note:"Lighten the weight as balance shifts."},
-    {id:"legLift", cat:"Side and lateral", name:"Side-lying leg lift (Pilates)", work:"20 sec per side", cue:"Hips stacked, lift the top leg slightly behind you.", note:"Pillow under the belly later in pregnancy."},
-    {id:"bridge", cat:"Hips and pelvic floor", name:"Bench-supported glute bridge", work:"40 sec", cue:"Shoulders on the bench, exhale as the hips rise.", note:"Avoids lying flat."},
+    {id:"legLift", cat:"Side and lateral", name:"Side-lying leg lift (Pilates)", work:"20 sec per side", cue:"Hips stacked, lift the top leg slightly behind you.", note:""},
+    {id:"bridge", cat:"Hips and pelvic floor", name:"Bench-supported glute bridge", work:"40 sec", cue:"Shoulders on the bench, exhale as the hips rise.", note:""},
     {id:"clam", cat:"Hips and pelvic floor", name:"Side-lying clamshell (Pilates)", work:"20 sec per side", cue:"Heels together, open the top knee without rolling back.", note:""},
     {id:"tilt", cat:"Hips and pelvic floor", name:"Quadruped pelvic tilts", work:"40 sec", cue:"On all fours, exhale and tuck the pelvis, inhale and release.", note:"Good breathing and pelvic floor practice."},
     {id:"slrdl", cat:"Balance", name:"Supported single-leg RDL", work:"20 sec per side", cue:"Hand on the rack, hinge on one leg, reach the free leg back.", note:"Keep a hand on support as balance changes."},
