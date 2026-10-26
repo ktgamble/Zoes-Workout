@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Upper body strength</title>
+<title>Strength plan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
@@ -167,7 +167,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
 <body>
 <header class="bar">
   <div class="bar-inner">
-    <div class="brand">Upper body strength</div>
+    <div class="brand">Strength plan</div>
     <div class="tabs" role="tablist" aria-label="Sections">
       <button class="tab" role="tab" id="tab-workout" aria-controls="panel-workout" aria-selected="true">Workout</button>
       <button class="tab" role="tab" id="tab-prog" aria-controls="panel-prog" aria-selected="false">Progression</button>
@@ -179,7 +179,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   <section id="panel-workout" role="tabpanel" aria-labelledby="tab-workout">
     <div class="hero">
       <div class="letter" id="bigLetter" aria-hidden="true">A</div>
-      <h1 id="heroTitle">Workout A</h1>
+      <h1 id="heroTitle">Upper body A</h1>
       <p id="heroSub">45 minutes.</p>
       <div class="hero-actions">
         <button class="btn" id="changeBtn">Change workout</button>
@@ -193,17 +193,11 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       <div>
         <h2>Warm-up</h2>
         <p class="muted">About a minute each.</p>
-        <ul class="list">
-          <li>Cat-cow into thread-the-needle</li>
-          <li>Arm circles and swings</li>
-          <li>Incline scap push-ups</li>
-          <li>Light cable face pulls</li>
-          <li>Dead hang or scap pull-ups</li>
-        </ul>
+        <ul class="list" id="warmList"></ul>
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="primerBlock">
       <div class="time">5:00<small>3 min</small></div>
       <div>
         <h2>Push-up primer</h2>
@@ -214,7 +208,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     </div>
 
     <div class="block">
-      <div class="time">8:00<small>19 min</small></div>
+      <div class="time" id="roundsTime">8:00<small>19 min</small></div>
       <div>
         <h2>Lifting rounds</h2>
         <p>Each round is a tri-set: strength, hypertrophy, endurance back to back with 20–30 seconds between, then 45–60 seconds rest. Do 2 sets.</p>
@@ -228,13 +222,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       <div>
         <h2>Transition</h2>
         <p>30–40 seconds each, to mild tension only. Then water and set up the mat.</p>
-        <ul class="list">
-          <li>Chest stretch in a doorway or on the cable frame</li>
-          <li>Lat stretch holding the pull-up bar</li>
-          <li>Cross-body shoulder stretch, each side</li>
-          <li>Overhead triceps stretch, each side</li>
-          <li>Wide-knee child’s pose</li>
-        </ul>
+        <ul class="list" id="stretchList"></ul>
       </div>
     </div>
 
@@ -334,15 +322,51 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
             cue:"Rope toward the forehead, elbows high, squeeze the shoulder blades.", swap:""},
     tp:    {name:"Single-arm cable tricep pushdown", kind:"wt", equip:"cable", uni:true,
             cue:"Elbow pinned at the side; only the forearm moves.", swap:""},
-    primer:{name:"Push-up primer", kind:"primer", equip:"body", uni:false, cue:"", swap:""}
+    primer:{name:"Push-up primer", kind:"primer", equip:"body", uni:false, cue:"", swap:""},
+    sqp:   {name:"Dumbbell squat and press", kind:"wt", equip:"db", uni:false,
+            cue:"Dumbbells at the shoulders, squat, then drive up and press overhead in one motion.", swap:""},
+    gob:   {name:"Goblet squat", kind:"wt", equip:"db", uni:false,
+            cue:"One dumbbell held at the chest, sit between the hips, chest tall.", swap:""},
+    dl:    {name:"Dumbbell deadlift", kind:"wt", equip:"db", uni:false,
+            cue:"Dumbbells at the sides, flat back, push the floor away.", swap:""},
+    farm:  {name:"Farmer carry", kind:"carry", equip:"db", uni:false,
+            cue:"A heavy dumbbell in each hand, walk tall with short steps.", swap:""},
+    step:  {name:"Weighted step-ups", kind:"wt", equip:"db", uni:true, side:"leg",
+            cue:"Whole foot on the bench, drive through the heel, control the step down.", swap:""},
+    rdl:   {name:"Dumbbell RDL", kind:"wt", equip:"db", uni:false,
+            cue:"Soft knees, push the hips back until the hamstrings stretch, then stand tall.", swap:""},
+    walk:  {name:"Walking lunges", kind:"wt", equip:"db", uni:true, side:"leg",
+            cue:"Long steps, torso tall, back knee toward the floor. Log 0 lb for bodyweight.", swap:""},
+    rev:   {name:"Reverse lunges", kind:"wt", equip:"db", uni:true, side:"leg",
+            cue:"Step back, lower the back knee, drive through the front heel. Log 0 lb for bodyweight.", swap:""},
+    jump:  {name:"Squat jumps", kind:"bw", equip:"body", uni:false,
+            cue:"Squat to a comfortable depth, jump, land softly through the whole foot.", swap:""}
   };
   var TIER_NAME = {H:"Strength", M:"Hypertrophy", E:"Endurance", P:"Primer"};
   var WORKOUTS = {
     A:[["neg","chest","vrow"],["sp","gor","fp"],["row","pu","tp"]],
     B:[["chest","row","fp"],["neg","sp","tp"],["gor","vrow","pu"]],
-    C:[["row","sp","pu"],["chest","gor","fp"],["neg","vrow","tp"]]
+    C:[["row","sp","pu"],["chest","gor","fp"],["neg","vrow","tp"]],
+    LA:[["dl","step","jump"],["gob","rdl","walk"],["sqp","farm","rev"]],
+    LB:[["gob","rdl","rev"],["dl","step","walk"],["sqp","farm","jump"]],
+    LC:[["sqp","rdl","walk"],["gob","farm","jump"],["dl","step","rev"]]
   };
-  var ORDER = ["A","B","C"], TIERS = ["H","M","E"];
+  var ORDER = ["A","LA","B","LB","C","LC"], TIERS = ["H","M","E"];
+  var UPPER_IDS = ["neg","row","gor","chest","sp","vrow","pu","fp","tp"];
+  var LOWER_IDS = ["sqp","gob","dl","farm","step","rdl","walk","rev","jump"];
+  var WARM = {
+    U:["Cat-cow into thread-the-needle","Arm circles and swings","Incline scap push-ups","Light cable face pulls","Dead hang or scap pull-ups"],
+    L:["Bodyweight squats","Glute bridges","Leg swings, front to back and side to side","World’s greatest stretch, each side","Hip hinges with hands on the hips"]
+  };
+  var STRETCH = {
+    U:["Chest stretch in a doorway or on the cable frame","Lat stretch holding the pull-up bar","Cross-body shoulder stretch, each side","Overhead triceps stretch, each side","Wide-knee child’s pose"],
+    L:["Half-kneeling hip flexor stretch, each side","Standing quad stretch, each side","Seated hamstring stretch","Figure-4 glute stretch, each side","Calf stretch against the wall, each side"]
+  };
+  function isLower(w){ return w.charAt(0) === "L"; }
+  function wLabel(w){ return (isLower(w) ? "Lower " : "Upper ") + w.slice(-1); }
+  function per(l){ return l.uni ? " per " + (l.side || "arm") : ""; }
+  function unitW(l){ return l.kind === "carry" ? " sec" : " reps"; }
+  function loaded(l){ return l.kind === "wt" || l.kind === "carry"; }
 
   var CORE_CATS = ["Anti-rotation","Anti-extension","Side and lateral","Hips and pelvic floor","Balance"];
   var CORE_LIB = [
@@ -495,6 +519,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   function range(id, tier){
     var l = LIFTS[id];
     if (l.kind === "neg") return [3,5];
+    if (l.kind === "carry") return [30,45];
     if (tier === "H") return state.stage === "late" ? [6,8] : [5,6];
     if (tier === "M") return [8,10];
     return l.uni ? [10,12] : [15,20];
@@ -503,10 +528,12 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   function describe(e){
     var l = LIFTS[e.lift];
     if (l.kind === "primer") return "5 rounds of " + e.reps + ", " + e.rounds + " of 5 clean";
-    var load = l.kind === "wt" ? (num(e.load) != null ? fmtW(num(e.load)) : "No weight noted") :
-               l.kind === "neg" ? (num(e.load) != null ? e.load + "-sec lowering" : "Bodyweight") :
+    var w = num(e.load);
+    var load = loaded(l) ? (w == null ? "No weight noted" : w === 0 ? "Bodyweight" : fmtW(w)) :
+               l.kind === "neg" ? (w != null ? e.load + "-sec lowering" : "Bodyweight") :
+               l.kind === "bw" ? "Bodyweight" :
                (e.load ? cap(e.load) : "Incline not noted");
-    return load + ", " + e.sets.length + (e.sets.length === 1 ? " set: " : " sets: ") + joinList(e.sets) + " reps" + (l.uni ? " per arm" : "");
+    return load + ", " + e.sets.length + (e.sets.length === 1 ? " set: " : " sets: ") + joinList(e.sets) + unitW(l) + per(l);
   }
 
   // ---------- Targets and suggestions ----------
@@ -532,7 +559,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   function hits(e, tg, l){
     if (l.kind === "primer") return e.reps >= tg.reps && e.rounds >= 5;
     if (e.sets.length < 2 || minSet(e) < tg.reps) return false;
-    if (l.kind === "pu") return true;
+    if (l.kind === "pu" || l.kind === "bw") return true;
     var a = num(e.load), b = num(tg.load);
     return b == null || (a != null && a >= b);
   }
@@ -542,12 +569,13 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     return n;
   }
   function fmtTarget(id, tg){
-    var l = LIFTS[id], per = LIFTS[id].uni ? " per arm" : "";
+    var l = LIFTS[id], w = num(tg.load);
     if (l.kind === "primer") return "5 rounds of " + tg.reps;
-    var load = l.kind === "wt" ? (num(tg.load) != null ? fmtW(num(tg.load)) : "Weight not set") :
-               l.kind === "neg" ? (num(tg.load) != null ? tg.load + "-sec lowering" : "3-sec lowering") :
+    var load = loaded(l) ? (w == null ? "Weight not set" : w === 0 ? "Bodyweight" : fmtW(w)) :
+               l.kind === "neg" ? (w != null ? tg.load + "-sec lowering" : "3-sec lowering") :
+               l.kind === "bw" ? "Bodyweight" :
                (tg.load ? cap(tg.load) : "Incline not set");
-    return load + ", " + tg.reps + " reps" + per;
+    return load + ", " + tg.reps + unitW(l) + per(l);
   }
   // Category rules: strength adds weight; hypertrophy and endurance add reps to the top of the range, then weight.
   function suggestion(id, t){
@@ -562,9 +590,9 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     }
     var r = range(id, t), mn = minSet(last), step = state.steps[l.equip] || 5, w = num(tg.load);
     if (mn < r[0]){
-      if (l.kind === "wt" && w != null && w > 0) return {dir:"down", label:"Lighten", load:String(Math.max(0, w - step)), reps:r[0], why:"Fell below " + r[0] + " reps last time."};
-      if (l.kind === "neg") return {dir:"down", label:"Shorter lowering", load:String(Math.max(2, (w || 3) - 1)), reps:r[0], why:"Fell below " + r[0] + " reps last time."};
-      if (l.kind === "pu") return {dir:"down", label:"Raise the incline", load:"one step higher than " + (tg.load || "last time"), reps:r[0], why:"Fell below " + r[0] + " reps last time."};
+      if (loaded(l) && w != null && w > 0) return {dir:"down", label:"Lighten", load:String(Math.max(0, w - step)), reps:r[0], why:"Fell below " + r[0] + unitW(l) + " last time."};
+      if (l.kind === "neg") return {dir:"down", label:"Shorter lowering", load:String(Math.max(2, (w || 3) - 1)), reps:r[0], why:"Fell below " + r[0] + unitW(l) + " last time."};
+      if (l.kind === "pu") return {dir:"down", label:"Raise the incline", load:"one step higher than " + (tg.load || "last time"), reps:r[0], why:"Fell below " + r[0] + unitW(l) + " last time."};
       return null;
     }
     var st = streak(id, t, tg), above = hits(last, tg, l) && mn > r[1];
@@ -576,10 +604,11 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       if (tg.reps < r[1]) return {dir:"up", label:"Add a rep", load:String(sec), reps:tg.reps + 1, why:why};
       return {dir:"up", label:"Add a band-assisted full rep", load:String(sec), reps:tg.reps, why:why + " Add one band-assisted full pull-up to each set."};
     }
-    var addReps = t === "E" && !l.uni ? 2 : 1;
+    var addReps = l.kind === "carry" ? 5 : (t === "E" && !l.uni ? 2 : 1);
     if (t !== "H" && tg.reps < r[1]){
-      return {dir:"up", label:"Add reps", load:tg.load, reps:Math.min(r[1], tg.reps + addReps), why:why};
+      return {dir:"up", label: l.kind === "carry" ? "Add time" : "Add reps", load:tg.load, reps:Math.min(r[1], tg.reps + addReps), why:why};
     }
+    if (l.kind === "bw") return null;
     if (l.kind === "pu") return {dir:"up", label:"Lower the incline", load:"one step lower than " + (tg.load || "last time"), reps:r[0], why:why};
     if (w == null) return null;
     return {dir:"up", label:"Increase weight", load:String(w + step), reps:r[0], why:why};
@@ -593,7 +622,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     return true;
   }
   function todaysPairs(){
-    var out = [["primer","P"]];
+    var out = isLower(state.current) ? [] : [["primer","P"]];
     WORKOUTS[state.current].forEach(function(r){ r.forEach(function(id, j){ out.push([id, TIERS[j]]); }); });
     return out;
   }
@@ -614,12 +643,12 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       var r = l.kind === "primer" ? null : range(id, t);
       return el("div", {class:"rx new"}, [
         el("span", {class:"badge new", text:"First session"}),
-        el("div", {class:"rx-main", text: l.kind === "primer" ? "5 rounds of 2" : (l.kind === "wt" ? "Pick a weight" : l.kind === "neg" ? "3-sec lowering" : "Pick an incline") + ", " + r[0] + "–" + r[1] + " reps" + (l.uni ? " per arm" : "")}),
+        el("div", {class:"rx-main", text: l.kind === "primer" ? "5 rounds of 2" : (loaded(l) ? "Pick a weight" : l.kind === "neg" ? "3-sec lowering" : l.kind === "bw" ? "Bodyweight" : "Pick an incline") + ", " + r[0] + "–" + r[1] + unitW(l) + per(l)}),
         el("div", {class:"rx-sub", text:"Log it and this becomes her target."})
       ]);
     }
     var st = streak(id, t, tg);
-    var sub = sg ? sg.label + ". " + sg.why : "Hit " + Math.min(st, 2) + " of 2 sessions in a row.";
+    var sub = sg ? sg.label + ". " + sg.why : st >= 2 ? "At the top of the range. Keep it steady." : "Hit " + st + " of 2 sessions in a row.";
     var kids = [
       el("span", {class:"badge " + (sg ? sg.dir : ""), text: sg ? "Change suggested" : "Target"}),
       el("div", {class:"rx-main", text:fmtTarget(id, tg)}),
@@ -662,16 +691,23 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
 
   function renderWorkout(){
     var w = state.current, n = nextOf(w);
-    document.getElementById("bigLetter").textContent = w;
-    document.getElementById("heroTitle").textContent = "Workout " + w;
-    var ups = suggestion("primer","P") ? 1 : 0;
+    document.getElementById("bigLetter").textContent = w.slice(-1);
+    document.getElementById("heroTitle").textContent = (isLower(w) ? "Lower body " : "Upper body ") + w.slice(-1);
+    var side = isLower(w) ? "L" : "U";
+    var wl = document.getElementById("warmList"); wl.innerHTML = "";
+    WARM[side].forEach(function(x){ wl.appendChild(el("li", {text:x})); });
+    var tl2 = document.getElementById("stretchList"); tl2.innerHTML = "";
+    STRETCH[side].forEach(function(x){ tl2.appendChild(el("li", {text:x})); });
+    var ups = !isLower(w) && suggestion("primer","P") ? 1 : 0;
+    document.getElementById("primerBlock").hidden = isLower(w);
+    document.getElementById("roundsTime").innerHTML = isLower(w) ? "5:00<small>22 min</small>" : "8:00<small>19 min</small>";
     WORKOUTS[w].forEach(function(r){ r.forEach(function(id, j){ if (suggestion(id, TIERS[j])) ups++; }); });
     document.getElementById("heroSub").textContent = "45 minutes. " +
-      (ups ? ups + (ups === 1 ? " target is" : " targets are") + " ready to update." : "Next time: Workout " + n + ".");
+      (ups ? ups + (ups === 1 ? " target is" : " targets are") + " ready to update." : "Next time: " + wLabel(n) + ".");
     var aa = document.getElementById("applyAll");
     aa.hidden = !ups;
     aa.textContent = ups === 1 ? "Update 1 target" : "Update all " + ups + " targets";
-    document.getElementById("finishBtn").textContent = "Finish and move to " + n;
+    document.getElementById("finishBtn").textContent = "Finish and move to " + wLabel(n);
 
     var pr = document.getElementById("primerRx"); pr.innerHTML = ""; pr.appendChild(targetBox("primer","P"));
 
@@ -732,7 +768,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     });
   }
   function renderControls(){
-    seg("viewSeg", [["today","Workout " + state.current + " lifts"],["all","All lifts"]],
+    seg("viewSeg", [["today",wLabel(state.current) + " lifts"],["all","All lifts"]],
         function(v){ return view === v; }, function(v){ view = v; renderProg(); });
     Array.prototype.forEach.call(document.querySelectorAll("#stageSeg button"), function(b){
       b.setAttribute("aria-pressed", String(b.dataset.stage === state.stage));
@@ -748,12 +784,12 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   });
 
   function rowsToShow(){
-    var rows = [["primer","P"]];
+    var rows = view === "today" && isLower(state.current) ? [] : [["primer","P"]];
     if (view === "today"){
       WORKOUTS[state.current].forEach(function(r){ r.forEach(function(id, j){ rows.push([id, TIERS[j]]); }); });
     } else {
       var seen = {};
-      ["neg","row","gor","chest","sp","vrow","pu","fp","tp"].forEach(function(id){
+      UPPER_IDS.concat(LOWER_IDS).forEach(function(id){
         TIERS.forEach(function(t, ti){
           ORDER.forEach(function(w){ WORKOUTS[w].forEach(function(r){
             if (r[ti] === id && !seen[id+t]){ seen[id+t] = 1; rows.push([id, t]); }
@@ -768,7 +804,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     var tg = targetOf(id, t), sg = suggestion(id, t);
     if (!tg) return [el("span", {class:"empty", text:"Set by her first log"})];
     var out = [el("div", {class:"lift-name", text:fmtTarget(id, tg)}),
-               el("div", {class:"muted", style:"font-size:14px", text: sg ? "" : "Hit " + Math.min(streak(id, t, tg), 2) + " of 2 sessions in a row"})];
+               el("div", {class:"muted", style:"font-size:14px", text: sg ? "" : (streak(id, t, tg) >= 2 ? "At the top of the range" : "Hit " + streak(id, t, tg) + " of 2 sessions in a row")})];
     if (sg){
       var acc = el("button", {class:"btn small primary", text:"Accept"});
       acc.addEventListener("click", function(){ acceptSuggestion(id, t); });
@@ -824,12 +860,12 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
   function buildSets(keep){
     var old = keep ? Array.prototype.map.call(setsWrap.querySelectorAll("input"), function(i){ return i.value; }) : [];
     setsWrap.innerHTML = "";
-    var uni = LIFTS[cur.id].uni;
+    var lc = LIFTS[cur.id];
     for (var i = 0; i < setCount; i++){
       var tgr = targetOf(cur.id, cur.t);
       var inp = el("input", {type:"number", inputmode:"numeric", min:"0", max:"99", id:"fSet" + i, placeholder: tgr ? String(tgr.reps) : ""});
       if (old[i] != null) inp.value = old[i];
-      setsWrap.appendChild(el("div", {class:"field"}, [el("label", {for:"fSet" + i, text:"Set " + (i+1) + " reps" + (uni ? " (per arm)" : "")}), inp]));
+      setsWrap.appendChild(el("div", {class:"field"}, [el("label", {for:"fSet" + i, text:"Set " + (i+1) + (lc.kind === "carry" ? " seconds" : " reps") + (lc.uni ? " (" + per(lc).trim() + ")" : "")}), inp]));
     }
     document.getElementById("rmSet").disabled = setCount <= 1;
     document.getElementById("addSet").disabled = setCount >= 4;
@@ -840,13 +876,17 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
     var r0 = l.kind === "primer" ? null : range(id, t);
     document.getElementById("dlgTitle").textContent = l.name;
     document.getElementById("dlgSub").textContent = (t === "P" ? "" : TIER_NAME[t] + ". ") +
-      (tg ? "Target: " + fmtTarget(id, tg) + "." : (r0 ? "Range: " + r0[0] + "–" + r0[1] + " reps" + (l.uni ? " per arm" : "") + "." : ""));
+      (tg ? "Target: " + fmtTarget(id, tg) + "." : (r0 ? "Range: " + r0[0] + "–" + r0[1] + unitW(l) + per(l) + "." : ""));
     document.getElementById("fDate").value = today();
     document.getElementById("fErr").textContent = "";
     var loadWrap = document.getElementById("loadWrap"), loadF = document.getElementById("fLoad"), loadL = document.getElementById("fLoadLbl");
     var tools = document.getElementById("setTools");
-    loadWrap.hidden = l.kind === "primer"; tools.hidden = l.kind === "primer";
-    if (l.kind === "wt"){ loadL.textContent = "Weight (lb)" + (l.uni ? ", per dumbbell or cable" : ""); loadF.type = "number"; loadF.inputMode = "decimal"; loadF.step = "0.5"; }
+    loadWrap.hidden = l.kind === "primer" || l.kind === "bw"; tools.hidden = l.kind === "primer";
+    if (loaded(l)){
+      loadL.textContent = l.equip === "db" ? (id === "gob" ? "Weight (lb)" : "Weight per dumbbell (lb)") : "Weight (lb)" + (l.uni ? ", per cable" : "");
+      if (id === "walk" || id === "rev") loadL.textContent += ", 0 for bodyweight";
+      loadF.type = "number"; loadF.inputMode = "decimal"; loadF.step = "0.5";
+    }
     else if (l.kind === "neg"){ loadL.textContent = "Lowering time (seconds)"; loadF.type = "number"; loadF.inputMode = "numeric"; loadF.step = "1"; }
     else if (l.kind === "pu"){ loadL.textContent = "Incline (for example: bench, box, frame bar 3)"; loadF.type = "text"; loadF.removeAttribute("step"); }
     var tl = tg && tg.load && !/^one step/.test(tg.load) ? tg.load : (last && last.load ? last.load : (l.kind === "neg" ? "3" : ""));
@@ -861,7 +901,7 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       setCount = 2; buildSets(false);
     }
     if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open","");
-    setTimeout(function(){ var f = setsWrap.querySelector("input"); if (f && l.kind !== "wt") f.focus(); else loadF.focus(); }, 30);
+    setTimeout(function(){ var f = setsWrap.querySelector("input"); if (f && (loadWrap.hidden || !loaded(l))) f.focus(); else loadF.focus(); }, 30);
   }
   document.getElementById("addSet").addEventListener("click", function(){ if (setCount < 4){ setCount++; buildSets(true); } });
   document.getElementById("rmSet").addEventListener("click", function(){ if (setCount > 1){ setCount--; buildSets(true); } });
@@ -879,9 +919,9 @@ dialog::backdrop{background:rgba(10,16,18,.45)}
       entry.reps = r; entry.rounds = n;
     } else {
       var sets = Array.prototype.map.call(setsWrap.querySelectorAll("input"), function(i){ return num(i.value); });
-      if (sets.some(function(v){ return v == null; })){ err.textContent = "Enter reps for every set, or remove the empty one."; return; }
+      if (sets.some(function(v){ return v == null; })){ err.textContent = (l.kind === "carry" ? "Enter seconds" : "Enter reps") + " for every set, or remove the empty one."; return; }
       var load = document.getElementById("fLoad").value.trim();
-      if (l.kind === "wt" && load === ""){ err.textContent = "Enter the weight so the next target can be worked out."; return; }
+      if (loaded(l) && load === ""){ err.textContent = "Enter the weight so the next target can be worked out."; return; }
       entry.load = load.slice(0,40); entry.sets = sets;
     }
     state.entries.push(entry);
